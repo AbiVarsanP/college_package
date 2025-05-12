@@ -149,7 +149,7 @@ class Staffs(models.Model):
         self.save()
     
     def check_credit(self):
-        if self.calculate_credit() <= self.college.student_credit and self.balance_credit() > 0:
+        if self.calculate_credit() <= self.college.staff_credit and self.balance_credit() > 0:
             return True
         
         return False

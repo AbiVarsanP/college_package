@@ -3,182 +3,481 @@
 {% block hero %}
 {% endblock %}
 {% block title %} Path Pilot {% endblock %}
- 
+
 {% block style %}
 <style>
-    .item-center {
-        border: 0.5px dashed var(--c2);
-        border-radius: 5px;
-        padding: 1em;
-        background-color: white;
+    :root {
+        --primary: #ffa101;
+        --secondary: #2c2c2c;
+        --background: #f5f7fa;
+        --card-bg: #ffffff;
+        --text: #1a1a1a;
+        --text-muted: #6b7280;
     }
-    .output-container {
-        background-color: whitesmoke;
+
+    /* Form card styling */
+    .form-card {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .roadmap-container {
-        border: 1px dotted rgba(128, 128, 128, 0.351);
-        padding: 5px;
+
+    
+
+    .form-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     }
-    h6 a {
-        color: var(--c3);
-    }
-    h3 {
-        color: var(--c2);
-        border-bottom: 1px dotted var(--c2);
-        font-family: var(--fnt);
-        letter-spacing: 1px;
+
+    .form-card h3 {
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
         text-align: center;
     }
-    .year-container p strong {
-        color: green;
+
+    /* Table container styling */
+    .table-container {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+    }
+
+    .table-container h3 {
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+
+    /* Table styling */
+    .table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table th,
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        color: var(--text);
+        font-weight: 600;
+        border-bottom: 2px solid #e5e7eb;
+    }
+
+    .table td {
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .table a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+
+    .table a:hover {
         text-decoration: underline;
     }
-    li a {
-        color: var(--c3);
+
+    /* Button group */
+    .btn-group {
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+        font-weight: 500;
+        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #e69101;
+        border-color: #e69101;
+    }
+
+    .btn-outline-success {
+        border-color: #28a745;
+        color: #28a745;
+        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    /* Modal styling */
+    .modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #e5e7eb;
+        background-color: var(--card-bg);
+    }
+
+    .modal-title {
+        color: var(--text);
+        font-weight: 600;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #e5e7eb;
+        padding: 1rem;
+    }
+
+    .btn-danger {
+        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        padding: 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.2rem rgba(255, 161, 1, 0.25);
+    }
+
+    /* Accordion styling */
+    .accordion-item {
+        background-color: var(--card-bg);
+        border: none;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .accordion-button {
+        background-color: var(--card-bg);
+        color: var(--text);
+        font-weight: 600;
+        padding: 1.25rem;
+        border-radius: 12px;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #f8f9fa;
+        color: var(--primary);
+    }
+
+    .accordion-body {
+        padding: 1.5rem;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .breadcrumb {
+        background-color: var(--white);
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .breadcrumb-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #d88901;
+        text-decoration: underline;
+    }
+
+    /* Responsive adjustments */
+    @media screen and (max-width: 768px) {
+        .form-card,
+        .table-container {
+            padding: 1rem;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary,
+        .btn-outline-success,
+        .btn-danger {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            font-size: 0.9rem;
+        }
+
+        .btn-group {
+            flex-direction: column;
+        }
+
+        .btn-primary,
+        .btn-outline-success {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
     }
 </style>
-{% endblock %} 
-
+{% endblock %}
 
 {% block main %}
-
-<div class="container">
+<div class="container" style="max-width: 100%;">
     
-    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
-    
-          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href=""> <img src="{% static 'defaults/icon/360.png' %}" width="30" style="transform: scale(1);"  alt=""> Feed 360&deg;</a></li>
-          
-        </ol>
-      </nav>
+  <nav  aria-label="breadcrumb" >
+      <ol class="breadcrumb" >
+        <li class="breadcrumb-item"><a href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+        <li class="breadcrumb-item"><a href="{% url 'cp' %}">Profes Pro</a></li>
+        <li class="breadcrumb-item active"><a style="color: var(--primary); font-size: 15px; padding: 2px;" href="{% url 'cp_history' %}">Records</a></li>
+      </ol>
+    </nav>
 </div>
 
-<div class="container item-center">
-    
-    <div class="row">
-        <form method="post" action="{% url 'feed360' %}">
-            {% csrf_token %}
-            <div class="col-12">
-                
-                <div class="btn-group w-100">
-                    <button type="submit" class="btn sub-btn" >  Create a new Form <i class="fa fa-plus"></i></button>
-                    <button type="button"   data-bs-toggle="modal" data-bs-target="#exel_form_modal" class="btn btn-outline-success w-50" >  With Exel file <i class="fa text-success fa-file-excel"></i></button>
-
-                
+<div class="container mt-4">
+    <div class="form-card">
+        <h3>Create Feedback Form</h3>
+        <div class="row">
+            <form method="post" action="{% url 'feed360' %}" id="create_form">
+                {% csrf_token %}
+                <div class="col-12">
+                    <div class="btn-group w-100">
+                        <button type="submit" class="btn btn-primary">Create a new Form <i class="fa fa-plus"></i></button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#exel_form_modal" class="btn btn-outline-success">With Excel file <i class="fa fa-file-excel"></i></button>
+                    </div>
                 </div>
-                
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
-    <br>
-
-
-    <div class="row">
-        <br>
+    <div class="table-container">
         <h3>Forms <i class="fas fa-file-medical-alt"></i></h3>
         {% if records %}
-    <table id="recordsindex4" class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th scope="col">Form Name</th>
-            <td>Questions</td>
-            <td>Responces</td>
-            <td>Options</td>
-          </tr>
-        </thead>
-        <tbody>
-          {% for i in records %}
-          <tr>
-          <th>{{i.name}}</td>
-          <td>{{i.questions.count}}</td>
-          <td>{{i.get_responce_count}}</td>
-          <td><a href="{% url 'create_form' i.id %}" style="text-decoration: none; color: var(--c2);"><i class="fas fa-cogs"></i>Settings</a></td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      {% endif %}
+        <table id="recordsindex4" class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Form Name</th>
+                    <th scope="col">Questions</th>
+                    <th scope="col">Responses</th>
+                    <th scope="col">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in records %}
+                <tr>
+                    <th>{{ i.name }}</th>
+                    <td>{{ i.questions.count }}</td>
+                    <td>{{ i.get_responce_count }}</td>
+                    <td><a href="{% url 'create_form' i.id %}"><i class="fas fa-cogs"></i> Settings</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No forms available.</p>
+        {% endif %}
     </div>
 
     {% if ExelForm %}
-    
-    <div class="row">
-        <br>
-        <h3>Exel Analysis <i class="far fa-comments"></i></h3>
-    <div class="accordion" id="previousAnalysis">
-
-        {% for i in ExelForm %}
-
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#file{{i.id}}" aria-expanded="false" aria-controls="file">
-              ID:{{i.id}} @ {{i.file_name}} 
-            </button>
-          </h2>
-          <div id="file{{i.id}}" class="accordion-collapse collapse" data-bs-parent="#previousAnalysis">
-            <div class="accordion-body">
-                {% autoescape off %}
-                {{ i.report }}  
-                {% endautoescape %}
+    <div class="table-container">
+        <h3>Excel Analysis <i class="far fa-comments"></i></h3>
+        <div class="accordion" id="previousAnalysis">
+            {% for i in ExelForm %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#file{{i.id}}" aria-expanded="false" aria-controls="file{{i.id}}">
+                        ID:{{i.id}} @ {{i.file_name}}
+                    </button>
+                </h2>
+                <div id="file{{i.id}}" class="accordion-collapse collapse" data-bs-parent="#previousAnalysis">
+                    <div class="accordion-body">
+                        {% autoescape off %}
+                        {{ i.report }}
+                        {% endautoescape %}
+                    </div>
+                </div>
             </div>
-          </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
     </div>
     {% endif %}
-
 </div>
+
 <div id="cpy_element"></div>
-  
+
 <div class="modal fade" id="exel_form_modal" tabindex="-1" aria-labelledby="exel_form_modal_label" aria-hidden="true">
-<div class="modal-dialog">
-    <div class="modal-content">
-    <form onsubmit="exel_sts()" action="{% url 'analysis_with_exel' %}" enctype="multipart/form-data" method="post">
-
-        <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exel_form_modal_label">Upload Your Exel Sheet</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form onsubmit="exel_sts()" action="{% url 'analysis_with_exel' %}" enctype="multipart/form-data" method="post" id="excel_form">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exel_form_modal_label">Upload Your Excel Sheet</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <input type="file" name="exel" id="excelFile" required onchange="updateAcceptAttribute()" accept=".xlsx, .xls" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close <i class="fas fa-times"></i></button>
+                    <button type="submit" id="exl_btn" class="btn btn-primary">Upload <i class="fas fa-file-upload"></i></button>
+                </div>
+            </form>
         </div>
-        <div class="modal-body">
-            
-                {% csrf_token %}
-                <input type="file" name="exel" id="excelFile" required onchange="updateAcceptAttribute()"  name="exel_file" accept=".xlsx, .xls" class="form-control">
-            
-
-        </div>
-        <div class="modal-footer">
-            <button type="button"  class="btn btn-danger" data-bs-dismiss="modal">Close <i class="fas fa-times text-light"></i></button>
-            <button type="submit" id="exl_btn"  class="btn btn-success">Upload <i class="fas text-light fa-file-upload"></i></button>
-        </div>
-    </form>
     </div>
 </div>
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="/media/Users/profiles/logo.png" style="width: 15px;" class="rounded me-2" alt="CloudPlusAI">
+            <strong class="me-auto">Notification</strong>
+            <small>now</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toast_message"></div>
+    </div>
 </div>
-  
+{% endblock %}
 
-
-
-{% endblock %} {% block script %}
+{% block script %}
 <script>
+    var opt = {
+        animation: true,
+        delay: 4000,
+        autohide: true,
+    };
 
-function exel_sts(){
-
-    document.getElementById("exl_btn").innerHTML = `Analysing <i class="fas text-light fa-spinner fa-spin"></i>`;
-}
-
-function updateAcceptAttribute() {
-      var fileInput = document.getElementById('excelFile');
-      var fileExtension = fileInput.value.split('.').pop().toLowerCase();
-      if (fileExtension !== 'xlsx' && fileExtension !== 'xls') {
-        alert('Please select an Excel file (XLSX or XLS format).');
-        fileInput.value = ''; // Clear the file input
-        return false;
-      }
-      return true;
+    function toast_show(text) {
+        document.getElementById("toast_message").innerText = text;
+        var tost_html = document.getElementById("liveToast");
+        var toast = new bootstrap.Toast(tost_html, opt);
+        toast.show();
     }
+
+    function exel_sts() {
+        document.getElementById("exl_btn").innerHTML = `Analysing <i class="fas fa-spinner fa-spin"></i>`;
+        toast_show("Uploading Excel file...");
+    }
+
+    function updateAcceptAttribute() {
+        var fileInput = document.getElementById('excelFile');
+        var fileExtension = fileInput.value.split('.').pop().toLowerCase();
+        if (fileExtension !== 'xlsx' && fileExtension !== 'xls') {
+            alert('Please select an Excel file (XLSX or XLS format).');
+            fileInput.value = '';
+            return false;
+        }
+        return true;
+    }
+
+    $(document).ready(function () {
+        // ✅ Safely initialize DataTable only once
+        if (!$.fn.DataTable.isDataTable('#recordsindex4')) {
+            $("#recordsindex4").DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                responsive: true,
+                autoWidth: true,
+                pageLength: 10,
+                dom: 'Bfrtip',
+                buttons: ['copy', 'excel', 'pdf', 'print'],
+                lengthMenu: [5, 10, 15, 25, 50],
+                language: {
+                    processing: "Processing...",
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    loadingRecords: "Loading...",
+                    zeroRecords: "No matching records found",
+                    emptyTable: "No data available in table",
+                    paginate: {
+                        first: "First",
+                        previous: "Previous",
+                        next: "Next",
+                        last: "Last"
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending"
+                    }
+                }
+            });
+        }
+
+        // Form submit for creating new form
+        var form = document.getElementById("create_form");
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            var btn = form.querySelector(".btn-primary");
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Creating...`;
+            btn.disabled = true;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", '{% url "feed360" %}', true);
+            xhr.setRequestHeader('X-CSRFToken', form.querySelector('[name=csrfmiddlewaretoken]').value);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    btn.innerHTML = `Create a new Form <i class="fa fa-plus"></i>`;
+                    btn.disabled = false;
+                    if (xhr.status === 200) {
+                        toast_show("Form created successfully!");
+                        window.location.reload();
+                    } else {
+                        toast_show(`Error creating form: ${xhr.status}`);
+                    }
+                }
+            };
+
+            xhr.onerror = function () {
+                btn.innerHTML = `Create a new Form <i class="fa fa-plus"></i>`;
+                btn.disabled = false;
+                toast_show("Network error during form creation.");
+            };
+
+            xhr.send(new FormData(form));
+        });
+
+        // Excel form validation
+        var excelForm = document.getElementById("excel_form");
+        excelForm.addEventListener("submit", function (e) {
+            if (!updateAcceptAttribute()) {
+                e.preventDefault();
+                return;
+            }
+        });
+    });
 </script>
 {% endblock %}

@@ -29,8 +29,6 @@
         overflow: hidden;
     }
 
-    
-
     .course-info-card h3 {
         color: var(--primary);
         font-weight: 700;
@@ -48,7 +46,7 @@
         justify-content: space-between;
     }
 
-    .form-container          {
+    .form-container {
         flex: 1;
         min-width: 300px;
         background-color: #ffffff80;
@@ -72,6 +70,7 @@
 
     .form-group label {
         font-weight: 500;
+        font-size: 1rem;
         color: var(--text);
         margin-bottom: 0.5rem;
         display: block;
@@ -179,6 +178,19 @@
         text-decoration: underline;
     }
 
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table th,
+    .table td {
+        min-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     @media (max-width: 768px) {
         .course-info-card {
             padding: 1.5rem;
@@ -193,54 +205,62 @@
             flex-direction: column;
             gap: 1.5rem;
         }
+
+        .item-center {
+            padding: 1rem;
+        }
+
+        .table th,
+        .table td {
+            font-size: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            min-width: 80px;
+            white-space: normal; /* Allow text wrapping */
+            max-width: none;
+        }
     }
 </style>
 {% endblock %}
+
 {% block main %}
-
-
-<div class="container">
-    
-  <nav  aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
-        <li class="breadcrumb-item"><a href="{% url 'cp' %}">Profes Pro</a></li>
-        <li class="breadcrumb-item active"><a style="color: var(--primary); font-size: 15px; padding: 2px;" href="{% url 'cp_history' %}">Records</a></li>
-      </ol>
+<div class="container" style="max-width: 100%;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{% url 'cp' %}">Profes Pro</a></li>
+            <li class="breadcrumb-item active"><a style="color: var(--primary); font-size: 15px; padding: 2px;" href="{% url 'cp_history' %}">Records</a></li>
+        </ol>
     </nav>
-  </div>
-
-<div class="container item-center">
-  {% if records %}
-    <table id="records" class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">Subject</th>
-            <th scope="col">Branch</th>
-            <td scope="col">Links</td>
-            <td scope="col">Created</td>
-          </tr>
-        </thead>
-        <tbody>
-          {% for i in records %}
-          <tr>
-            <th scope="row">CP{{i.id}}</th>
-            <td>{{i.subject}}</td>
-            <td>{{i.sbranch}}</td>
-            <td><a href="{% url 'cp_record' i.id %}" class="view">view all</a></td>
-            <td>{{i.created}}</td>
-
-        </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-        <h2>No records Found</h2>
-      {% endif %}
 </div>
 
-
-
-
+<div class="container item-center">
+    {% if records %}
+    <div class="table-responsive">
+        <table id="records" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Branch</th>
+                    <th scope="col">Links</th>
+                    <th scope="col">Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in records %}
+                <tr>
+                    <th scope="row">CP{{i.id}}</th>
+                    <td>{{i.subject}}</td>
+                    <td>{{i.sbranch}}</td>
+                    <td><a href="{% url 'cp_record' i.id %}" class="view">View All</a></td>
+                    <td>{{i.created}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <h2>No Records Found</h2>
+    {% endif %}
+</div>
 {% endblock %}
