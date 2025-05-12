@@ -39,7 +39,7 @@
         box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
     }
     .progress-bar{
-        background-color: var(--c2);
+        background-color: #ffa101;
     }
     .usage a{
         text-decoration:none;
@@ -120,7 +120,6 @@
         <div class="col m-1 p-1 ">
             <div class="usage">
                 <div class="usage-logo">
-                    <img src="{% static 'defaults/icon/cg.png' %}"  alt="">
                 </div>
                 <a href="{% url 'cg' %}" ><i class="fas fa-link"></i>Path pilot Usage : {{profile.CT_usage.count}}%</a>
                 <hr>
@@ -133,7 +132,6 @@
         <div class="col m-1 p-1 ">
             <div class="usage">
                 <div class="usage-logo">
-                    <img src="{% static 'defaults/icon/ats.png' %}"  alt="">
                 </div>
                 <a href="{% url 'ats_history' %}"><i class="fas fa-link"></i>ATS : {{profile.ATS_usage.count}}%</a>
                 <hr>
@@ -147,19 +145,17 @@
         <div class="col m-1 p-1 ">
             <div class="usage">
                 <div class="usage-logo">
-                    <img src="{% static 'defaults/icon/pp.png' %}"  alt="">
                 </div>
                 <a href="{% url 'cp_history' %}"><i class="fas fa-chalkboard-teacher me-2"></i>Profes Pro : {{profile.CP_usage.count}}%</a>
                 <hr>
                 <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar" style="width: {{profile.CP_usage.count}}%;" ></div>
-                  </div>
+                    <div class="progress-bar" style="width: 3%;"></div>
+                </div>
             </div>
         </div>
         <div class="col m-1 p-1 ">
             <div class="usage">
                 <div class="usage-logo">
-                    <img src="{% static 'defaults/icon/ats.png' %}"  alt="">
                 </div>
                 <a href="{% url 'ats_history' %}"><i class="fas fa-tasks me-2"></i>ATS : {{profile.ATS_usage.count}}%</a>
                 <hr>
@@ -172,7 +168,6 @@
         <div class="col m-1 p-1 ">
             <div class="usage">
                 <div class="usage-logo">
-                    <img src="{% static 'defaults/icon/smcg.png' %}"  alt="">
                 </div>
                 <a class="nav-link" href="{% url 'feed360' %}"><i class="fas fa-sync-alt me-2"></i>Feed 360°</a>
                 <hr>
