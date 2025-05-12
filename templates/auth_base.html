@@ -1,0 +1,572 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{% block title %}CloudPlusAI{% endblock %}</title>
+        <link
+            rel="shortcut icon"
+            href="/media/Users/profiles/logo.png"
+            type="image/x-icon"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+            crossorigin="anonymous"
+        />
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Josefin+Sans:ital,wght@1,500&family=Lato:ital@0;1&family=Montserrat:wght@600&family=Poppins:wght@300&family=Reem+Kufi+Ink&display=swap");
+            body {
+                background: linear-gradient(to bottom right, #fff3e0, #ffe0b2);
+                --c1: #ffa101;
+                --c2: #ffa101;
+                --c3: #f5f2eb;
+                --c4: #ffa101;
+                --fnt: "Reem Kufi Ink", sans-serif;
+                font-family: var(--fnt);
+                font-weight: lighter;
+                background-repeat: no-repeat;
+                min-height: 100vh
+
+            }
+            .form-control{
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+
+            .wave-bottom {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                z-index: -1 ;
+              }
+
+            .navbar {
+                padding-top: 40px;
+
+            }
+            .navbar-brand {
+                font-family: var(--fnt);
+                font-size: 22px;
+                color: #ffa101;
+                font-weight: 400;
+                font-style: normal;
+                font-weight: bold;
+            }
+            a:hover {
+                color: var(--c1) !important;
+            }
+            .logout {
+                color: var(--c2);
+                font-family: var(--fnt);
+                letter-spacing: 1px;
+            }
+            .logout:hover {
+                border-bottom: 1px solid var(--c2);
+                transition: step-end;
+            }
+            .list-group li {
+                text-align: center;
+                text-transform: capitalize;
+                font-family: var(--fnt);
+                font-weight: bold;
+                letter-spacing: 1px;
+                font-size: 1em;
+                color: var(--c4);
+                border-color: var(--c2) !important;
+                padding: auto;
+            }
+            .list-group li:hover {
+                backdrop-filter: blur(5px);
+                color: var(--c2);
+                transition: ease-in;
+                animation: step-end;
+            }
+            .list-group {
+                text-align: start;
+                width: 20em;
+            }
+            .menu {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            thead {
+                text-align: center;
+            }
+            table {
+
+                
+                
+            }
+            tbody {
+                text-align: center;
+            }
+
+            .list-group-item a,
+            .uid {
+                color: var(--c2);
+                text-decoration: none;
+            }
+            .list-group-item a:hover,
+            .uid:hover {
+                text-decoration: dotted;
+            }
+            .cpy {
+                position: fixed;
+                bottom: 5px;
+                right: 5px;
+                color: grey;
+                font-size: var(--fnt);
+            }
+            .sub-btn {
+                width: 100%;
+                padding: 5px;
+                border-radius: 5px;
+                font-family: var(--fnt);
+                font-size: 18px;
+                color: var(--c2);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                background-color: var(--c2);
+                color: white;
+
+
+            }
+            .sub-btn:hover {
+                background-color: var(--c2);
+                color: white;
+            }
+            .navbar-brand{
+                width: 100%;
+                text-align: center;
+            }
+            .item-center{
+                background:#ffffff80;
+                padding: 40px;
+                border-radius: 16px;
+                box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+                width: 100%;
+                max-width: 400px;
+                backdrop-filter: blur(8px);
+            }
+            .btn-group{
+                width: 100%;
+                gap: 10px;
+
+            }
+            .fp{
+                color: var(--c2);
+                text-decoration: none;
+                letter-spacing: 1px;
+            }
+            .errorlist{
+                list-style-type:circle;
+            }
+            .errorlist li{
+                text-decoration: none;
+                color: red;
+            }
+            
+           
+            input,.form-control{
+                border-radius: 3px;
+                font-size: medium;
+                width: 100%;
+                min-width: 300px;
+                border: 1px solid var(--c2);
+                text-align: start;
+                padding: 6px;
+                transition: all 0.5s ease;
+
+            }
+
+            input:hover,.form-control:hover{
+                transform: scale(1.01);
+                box-shadow: 0 0 10px rgba(255, 161, 1, 0.3);
+                
+            }
+            input:focus,.form-control:focus{
+                border-radius: 0px;
+                border: 1px dashed var(--c1);
+                box-shadow: 0 0 10px rgba(255, 161, 1, 0.3);
+                
+            }
+            .sub-btn{
+                transition: all 0.5s ease;
+            }
+            .sub-btn:hover i{
+                color: white;
+                transform: translateX(10px);
+            }
+            .sub-btn:hover{
+                color: white !important;
+            }
+
+        </style>
+        <script
+        src="https://kit.fontawesome.com/d929d31a20.js"
+        crossorigin="anonymous"
+        ></script>
+        <script
+        src="https://kit.fontawesome.com/d929d31a20.js"
+        crossorigin="anonymous"
+        ></script>
+        {% block style %} {% endblock %}
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    {% block nav %}
+
+                    <a class="navbar-brand" href="#">
+                        <img
+                            src="/media/Users/profiles/logo.png"
+                            alt="img"
+                            width="36"
+                            height="36"
+                            class="d-inline-block align-text-top"
+                        />
+                        &nbsp;CloudPlusAI
+                    </a>
+                    {% endblock %}
+                </div>
+            </nav>
+        </div>
+        <br /><br />
+        {% if messages %}
+        <div class="container item-center">
+            
+            {% for i in messages %}
+            <div class="alert alert-{{i.tags}}">
+                {{i}}    
+                                
+            </div>
+            <br>
+            {% endfor %}
+            
+            
+
+        </div>
+        {% endif %}
+        <main>
+            {% block main %} 
+            
+            {% endblock %}</main>
+        <br /><br />
+        <p class="cpy">&copy; CloudPlusAI . All Rights are Reserved.</p>
+        
+        <svg class="wave-bottom" viewBox="0 0 1440 150" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#ffa101" fill-opacity="1" d="M0,64L48,74.7C96,85,192,107,288,112C384,117,480,107,576,85.3C672,64,768,32,864,21.3C960,11,1056,21,1152,37.3C1248,53,1344,75,1392,85.3L1440,96L1440,150L1392,150C1344,150,1248,150,1152,150C1056,150,960,150,864,150C768,150,672,150,576,150C480,150,384,150,288,150C192,150,96,150,48,150L0,150Z"/>
+        </svg>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+            crossorigin="anonymous"
+        ></script>
+
+    </body>
+</html>
+{% comment %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{% block title %}CloudPlusAI{% endblock %}</title>
+        <link
+            rel="shortcut icon"
+            href="/media/Users/profiles/logo.png"
+            type="image/x-icon"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+            crossorigin="anonymous"
+        />
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Josefin+Sans:ital,wght@1,500&family=Lato:ital@0;1&family=Montserrat:wght@600&family=Poppins:wght@300&family=Reem+Kufi+Ink&display=swap");
+            body {
+                background: linear-gradient(to bottom right, #fff3e0, #ffe0b2);
+                --c1: #ffa101;
+                --c2: #ffa101;
+                --c3: #f5f2eb;
+                --c4: #ffa101;
+                --fnt: "Reem Kufi Ink", sans-serif;
+                font-family: var(--fnt);
+                font-weight: lighter;
+                background-repeat: no-repeat;
+                min-height: 100vh
+
+            }
+            .form-control{
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+
+            .wave-bottom {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                z-index: -1 ;
+              }
+
+            .navbar {
+                padding-top: 40px;
+
+            }
+            .navbar-brand {
+                font-family: var(--fnt);
+                font-size: 22px;
+                color: #ffa101;
+                font-weight: 400;
+                font-style: normal;
+                font-weight: bold;
+            }
+            a:hover {
+                color: var(--c1) !important;
+            }
+            .logout {
+                color: var(--c2);
+                font-family: var(--fnt);
+                letter-spacing: 1px;
+            }
+            .logout:hover {
+                border-bottom: 1px solid var(--c2);
+                transition: step-end;
+            }
+            .list-group li {
+                text-align: center;
+                text-transform: capitalize;
+                font-family: var(--fnt);
+                font-weight: bold;
+                letter-spacing: 1px;
+                font-size: 1em;
+                color: var(--c4);
+                border-color: var(--c2) !important;
+                padding: auto;
+            }
+            .list-group li:hover {
+                backdrop-filter: blur(5px);
+                color: var(--c2);
+                transition: ease-in;
+                animation: step-end;
+            }
+            .list-group {
+                text-align: start;
+                width: 20em;
+            }
+            .menu {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            thead {
+                text-align: center;
+            }
+            table {
+                
+            }
+            tbody {
+                text-align: center;
+            }
+
+            .list-group-item a,
+            .uid {
+                color: var(--c2);
+                text-decoration: none;
+            }
+            .list-group-item a:hover,
+            .uid:hover {
+                text-decoration: dotted;
+            }
+            .cpy {
+                position: fixed;
+                bottom: 5px;
+                right: 5px;
+                color: grey;
+                font-size: var(--fnt);
+            }
+            .sub-btn {
+                width: 100%;
+                padding: 5px;
+                border-radius: 5px;
+                font-family: var(--fnt);
+                font-size: 18px;
+                color: var(--c2);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                background-color: var(--c2);
+                color: white;
+
+
+            }
+            .sub-btn:hover {
+                background-color: var(--c2);
+                color: white;
+            }
+            .navbar-brand{
+                width: 100%;
+                text-align: center;
+            }
+            .item-center{
+                background: rgba(255, 255, 255, 0.9);
+                padding: 40px;
+                border-radius: 16px;
+                box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+                width: 100%;
+                max-width: 400px;
+                backdrop-filter: blur(8px);
+            }
+            .btn-group{
+                width: 100%;
+                gap: 10px;
+
+            }
+            .fp{
+                color: var(--c2);
+                text-decoration: none;
+                letter-spacing: 1px;
+            }
+            .errorlist{
+                list-style-type:circle;
+            }
+            .errorlist li{
+                text-decoration: none;
+                color: red;
+            }
+            
+           
+            input,.form-control{
+                border-radius: 3px;
+                font-size: medium;
+                width: 100%;
+                min-width: 300px;
+                border: 1px solid var(--c2);
+                text-align: start;
+                padding: 6px;
+                transition: all 0.5s ease;
+
+            }
+
+            input:hover,.form-control:hover{
+                transform: scale(1.01);
+                box-shadow: 0 0 10px rgba(255, 161, 1, 0.3);
+                
+            }
+            input:focus,.form-control:focus{
+                border-radius: 0px;
+                border: 1px dashed var(--c1);
+                box-shadow: 0 0 10px rgba(255, 161, 1, 0.3);
+                
+            }
+            .sub-btn{
+                transition: all 0.5s ease;
+            }
+            .sub-btn:hover i{
+                color: white;
+                transform: translateX(10px);
+            }
+            .sub-btn:hover{
+                color: white !important;
+            }
+
+        </style>
+        <script
+        src="https://kit.fontawesome.com/d929d31a20.js"
+        crossorigin="anonymous"
+        ></script>
+        <script
+        src="https://kit.fontawesome.com/d929d31a20.js"
+        crossorigin="anonymous"
+        ></script>
+        {% block style %} {% endblock %}
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    {% block nav %}
+
+                    <a class="navbar-brand" href="#">
+                        <img
+                            src="/media/Users/profiles/logo.png"
+                            alt="img"
+                            width="36"
+                            height="36"
+                            class="d-inline-block align-text-top"
+                        />
+                        &nbsp;CloudPlusAI
+                    </a>
+                    {% endblock %}
+                </div>
+            </nav>
+        </div>
+        <br /><br />
+        {% if messages %}
+        <div class="container item-center">
+            
+            {% for i in messages %}
+            <div class="alert alert-{{i.tags}}">
+                {{i}}    
+                                
+            </div>
+            <br>
+            {% endfor %}
+            
+            
+
+        </div>
+        {% endif %}
+        <main>
+            {% block main %} 
+            
+            {% endblock %}</main>
+        <br /><br />
+        <p class="cpy">&copy; CloudPlusAI . All Rights are Reserved.</p>
+        
+        <svg class="wave-bottom" viewBox="0 0 1440 150" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#ffa101" fill-opacity="1" d="M0,64L48,74.7C96,85,192,107,288,112C384,117,480,107,576,85.3C672,64,768,32,864,21.3C960,11,1056,21,1152,37.3C1248,53,1344,75,1392,85.3L1440,96L1440,150L1392,150C1344,150,1248,150,1152,150C1056,150,960,150,864,150C768,150,672,150,576,150C480,150,384,150,288,150C192,150,96,150,48,150L0,150Z"/>
+        </svg>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+            crossorigin="anonymous"
+        ></script>
+
+    </body>
+</html>
+{% endcomment %}

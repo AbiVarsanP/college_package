@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Path Pilot {% endblock %}
+{% block hero %}
+{% endblock %}
+
+{% block style %}
+<style>
+    :root {
+        --primary: #ffa101;
+        --dark: #1f2a44;
+        --light-gray: #f5f7fa;
+        --white: #ffffff;
+        --text: #333333;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        color: var(--text);
+        background-color: #ffa10150;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .course-info-card {
+        border-radius: 15px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    
+
+    .course-info-card h3 {
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .content-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: space-between;
+    }
+
+    .form-container          {
+        flex: 1;
+        min-width: 300px;
+        background-color: #ffffff80;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .output-container {
+        flex: 1;
+        min-width: 300px;
+        background-color: #ffffff80;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 8px rgba(255, 161, 1, 0.2);
+        outline: none;
+    }
+
+    .btn-primary {
+        background-color: var(--white);
+        border: none;
+        padding: 0.75rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        border-radius: 8px;
+        color: var(--primary);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: rgb(230, 230, 230);
+        transform: translateY(-2px);
+        color: var(--primary);
+    }
+
+    .btn-outline-danger {
+        border: 1px solid #dc3545;
+        color: #dc3545;
+        font-weight: 500;
+        border-radius: 8px;
+        padding: 0.75rem 2rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: var(--white);
+        transform: translateY(-2px);
+    }
+
+    .output-container h4 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    #outtit {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .breadcrumb {
+        background-color: var(--white);
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .breadcrumb-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #d88901;
+        text-decoration: underline;
+    }
+
+    .list-group-item {
+        background-color: var(--white);
+        border: none;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .list-group-item:hover {
+        transform: translateY(-2px);
+    }
+
+    .list-group-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .list-group-item a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .course-info-card {
+            padding: 1.5rem;
+        }
+
+        .form-container, .output-container {
+            min-width: 100%;
+            padding: 1.5rem;
+        }
+
+        .content-row {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="main-content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active"><a href="{% url 'cp' %}"><i class="fas fa-chalkboard-teacher" style="color: var(--primary); font-size: 15px; padding: 2px;"></i> Profes Pro</a></li>
+        </ol>
+    </nav>
+
+    <div class="course-info-card">
+        <h3>Course Information</h3>
+        <div class="content-row">
+            <div class="form-container">
+                <form action="POST" id="cg_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="sbranch">Students Branch</label>
+                        <input type="text" name="sbranch" id="sbranch" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sub">Subject Name</label>
+                        <input type="text" name="sub" id="sub" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="syllabus">Syllabus</label>
+                        <textarea name="syllabus" class="form-control" id="syllabus" cols="30" rows="4" placeholder="Lesson Wise Topics"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tp">Total Class Periods</label>
+                        <input type="text" class="form-control" name="tp" id="tp" placeholder="Total class periods" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dur">Duration</label>
+                        <input type="number" class="form-control" name="dur" id="dur" placeholder="in min" />
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-3">
+                        <button class="btn btn-primary" id="submit" type="submit">Generate</button>
+                        <button type="reset" class="btn btn-outline-danger">Reset</button>
+                    </div>
+                </form>
+            </div>
+            <div class="output-container">
+                <p id="outtit">Course Map Comes here...</p>
+                <div id="output-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="container col-md" id="courses"></div>
+        <div class="container col-md" id="profiles"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    var form = document.getElementById("cg_form");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var btn = document.getElementById("submit");
+        btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i> Generating`;
+        btn.disabled = true;
+        scrollToCard();
+
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value);
+        data.append("sbranch", e.target.sbranch.value);
+        data.append("sub", e.target.sub.value);
+        data.append("syllabus", e.target.syllabus.value);
+        data.append("dur", e.target.dur.value);
+        data.append("tp", e.target.tp.value);
+
+        document.getElementById("output-container").innerHTML = "";
+        document.getElementById("outtit").innerText = `Generating Map For ${e.target.sub.value}.`;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '{% url "course_map" %}', true);
+        xhr.send(data);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    btn.disabled = false;
+                    btn.innerHTML = "Generate";
+                    var response = JSON.parse(xhr.responseText);
+                    load_DOM(response);
+                    document.getElementById("outtit").innerText = `Courses Map for ${e.target.sub.value}.`;
+                } else {
+                    btn.innerHTML = `Error [${xhr.status}]`;
+                }
+            }
+        };
+    });
+
+    function generateCoursePlanHTML(courseplan) {
+        let html = "<div class='plan'>";
+        for (const week in courseplan) {
+            if (courseplan.hasOwnProperty(week)) {
+                const details = courseplan[week];
+                html += `<h4>${week}</h4>`;
+                html += `<ul class="list-group list-group-flush">`;
+                html += `<li class="list-group-item"><strong>Topic</strong>: ${details.Topic}</li>`;
+                html += `<li class="list-group-item"><strong>Periods</strong>: ${details.Periods}</li>`;
+                html += `<li class="list-group-item"><strong>Hints</strong>: ${details.Hints}</li>`;
+                html += `<li class="list-group-item"><strong>Learning Resources</strong>:`;
+                html += `<ul>`;
+                for (const resource in details["Learning Resources"]) {
+                    if (details["Learning Resources"].hasOwnProperty(resource)) {
+                        html += `<li><a target="_blank" href="${details["Learning Resources"][resource]}">${resource}</a></li>`;
+                    }
+                }
+                html += `</ul></li>`;
+                html += `</ul>`;
+            }
+        }
+        html += `</div>`;
+        return html;
+    }
+
+    function load_DOM(data) {
+        const outputContainer = document.getElementById("output-container");
+        outputContainer.innerHTML = generateCoursePlanHTML(data.courseplan);
+    }
+
+    function scrollToCard() {
+        document.querySelector('.course-info-card').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+</script>
+{% endblock %}

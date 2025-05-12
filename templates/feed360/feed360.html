@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% load static %}
+{% block hero %}
+{% endblock %}
+{% block title %} Path Pilot {% endblock %}
+ 
+{% block style %}
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    .output-container {
+        background-color: whitesmoke;
+    }
+    .roadmap-container {
+        border: 1px dotted rgba(128, 128, 128, 0.351);
+        padding: 5px;
+    }
+    h6 a {
+        color: var(--c3);
+    }
+    h3 {
+        color: var(--c2);
+        border-bottom: 1px dotted var(--c2);
+        font-family: var(--fnt);
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    .year-container p strong {
+        color: green;
+        text-decoration: underline;
+    }
+    li a {
+        color: var(--c3);
+    }
+</style>
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href=""> <img src="{% static 'defaults/icon/360.png' %}" width="30" style="transform: scale(1);"  alt=""> Feed 360&deg;</a></li>
+          
+        </ol>
+      </nav>
+</div>
+
+<div class="container item-center">
+    
+    <div class="row">
+        <form method="post" action="{% url 'feed360' %}">
+            {% csrf_token %}
+            <div class="col-12">
+                
+                <div class="btn-group w-100">
+                    <button type="submit" class="btn sub-btn" >  Create a new Form <i class="fa fa-plus"></i></button>
+                    <button type="button"   data-bs-toggle="modal" data-bs-target="#exel_form_modal" class="btn btn-outline-success w-50" >  With Exel file <i class="fa text-success fa-file-excel"></i></button>
+
+                
+                </div>
+                
+            </div>
+        </form>
+    </div>
+
+    <br>
+
+
+    <div class="row">
+        <br>
+        <h3>Forms <i class="fas fa-file-medical-alt"></i></h3>
+        {% if records %}
+    <table id="recordsindex4" class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Form Name</th>
+            <td>Questions</td>
+            <td>Responces</td>
+            <td>Options</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in records %}
+          <tr>
+          <th>{{i.name}}</td>
+          <td>{{i.questions.count}}</td>
+          <td>{{i.get_responce_count}}</td>
+          <td><a href="{% url 'create_form' i.id %}" style="text-decoration: none; color: var(--c2);"><i class="fas fa-cogs"></i>Settings</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      {% endif %}
+    </div>
+
+    {% if ExelForm %}
+    
+    <div class="row">
+        <br>
+        <h3>Exel Analysis <i class="far fa-comments"></i></h3>
+    <div class="accordion" id="previousAnalysis">
+
+        {% for i in ExelForm %}
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#file{{i.id}}" aria-expanded="false" aria-controls="file">
+              ID:{{i.id}} @ {{i.file_name}} 
+            </button>
+          </h2>
+          <div id="file{{i.id}}" class="accordion-collapse collapse" data-bs-parent="#previousAnalysis">
+            <div class="accordion-body">
+                {% autoescape off %}
+                {{ i.report }}  
+                {% endautoescape %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+    {% endif %}
+
+</div>
+<div id="cpy_element"></div>
+  
+<div class="modal fade" id="exel_form_modal" tabindex="-1" aria-labelledby="exel_form_modal_label" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <form onsubmit="exel_sts()" action="{% url 'analysis_with_exel' %}" enctype="multipart/form-data" method="post">
+
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exel_form_modal_label">Upload Your Exel Sheet</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            
+                {% csrf_token %}
+                <input type="file" name="exel" id="excelFile" required onchange="updateAcceptAttribute()"  name="exel_file" accept=".xlsx, .xls" class="form-control">
+            
+
+        </div>
+        <div class="modal-footer">
+            <button type="button"  class="btn btn-danger" data-bs-dismiss="modal">Close <i class="fas fa-times text-light"></i></button>
+            <button type="submit" id="exl_btn"  class="btn btn-success">Upload <i class="fas text-light fa-file-upload"></i></button>
+        </div>
+    </form>
+    </div>
+</div>
+</div>
+  
+
+
+
+{% endblock %} {% block script %}
+<script>
+
+function exel_sts(){
+
+    document.getElementById("exl_btn").innerHTML = `Analysing <i class="fas text-light fa-spinner fa-spin"></i>`;
+}
+
+function updateAcceptAttribute() {
+      var fileInput = document.getElementById('excelFile');
+      var fileExtension = fileInput.value.split('.').pop().toLowerCase();
+      if (fileExtension !== 'xlsx' && fileExtension !== 'xls') {
+        alert('Please select an Excel file (XLSX or XLS format).');
+        fileInput.value = ''; // Clear the file input
+        return false;
+      }
+      return true;
+    }
+</script>
+{% endblock %}

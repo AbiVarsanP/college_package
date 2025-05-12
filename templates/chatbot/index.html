@@ -1,0 +1,414 @@
+
+{% extends 'base.html' %} 
+{% load static %}
+{% block main %}
+
+<style>
+    .usage-logo{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .usage-logo img{
+        width: 50px;
+        transform: scale(1.5);
+        transition: transform 0.5s ease;
+    }
+    .usage{
+        background-color: #ffa20165;
+        border-radius: 12px;
+        padding: 2rem;
+        border: 1px solid #ffa101;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.582);
+    }
+
+    .usage:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    .row{
+        justify-content: space-around;
+    }
+    .progress{
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+    }
+    .progress-bar{
+        background-color: var(--c2);
+    }
+    .usage a{
+        text-decoration:none;
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #ffa101;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        background-color: rgba(255, 255, 255, 0.404);
+    }
+    .usage:hover > .usage-logo img{
+        transform: scale(1.2);    
+    }
+
+    
+    
+    .his{
+        background-color: #ffffff80;
+        padding: 20px;
+        max-width:100%;
+        padding-top: 2em;
+        text-align: center;
+        border-radius: 6px;
+    }
+
+    .his h3{
+        color: #ffa101;
+        font-weight: bold;
+    }
+    .his hr{
+        color: var(--c3);
+    }
+
+    @media screen and (max-width: 600px) {
+        .col{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .usage{
+            width: 90%;
+        }
+
+        #recordsindex2 td:nth-last-child(1),
+        #recordsindex2 th:nth-last-child(1),
+        #recordsindex3 td:nth-last-child(1),
+        #recordsindex3 th:nth-last-child(1){
+            display: none;
+        }
+
+
+    }
+
+</style>
+
+
+        
+
+<div class="container text-center">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-4">
+    
+
+        {% if user.is_superuser %}
+        
+        <div class="col m-1 p-1 ">
+            <div class="usage">
+                <div class="usage-logo">
+                    <img src="{% static 'defaults/icon/cb.png' %}" style="transform: scale(1);"  alt="">
+                </div>
+                <hr>
+
+                <a href="{% url 'chatbotlist' %}" ><i class="fas fa-link"></i>View all Edbud</a>
+            </div>
+        </div>
+        {% endif %}
+        {% if not user.is_staff %}
+        <div class="col m-1 p-1 ">
+            <div class="usage">
+                <div class="usage-logo">
+                    <img src="{% static 'defaults/icon/cg.png' %}"  alt="">
+                </div>
+                <a href="{% url 'cg' %}" ><i class="fas fa-link"></i>Path pilot Usage : {{profile.CT_usage.count}}%</a>
+                <hr>
+                <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: {{profile.CT_usage.count}}%;" ></div>
+                  </div>
+            </div>
+        </div>
+
+        <div class="col m-1 p-1 ">
+            <div class="usage">
+                <div class="usage-logo">
+                    <img src="{% static 'defaults/icon/ats.png' %}"  alt="">
+                </div>
+                <a href="{% url 'ats_history' %}"><i class="fas fa-link"></i>ATS : {{profile.ATS_usage.count}}%</a>
+                <hr>
+                <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: {{profile.ATS_usage.count}}%;" ></div>
+                  </div>
+            </div>
+        </div>
+
+        {% else %}
+        <div class="col m-1 p-1 ">
+            <div class="usage">
+                <div class="usage-logo">
+                    <img src="{% static 'defaults/icon/pp.png' %}"  alt="">
+                </div>
+                <a href="{% url 'cp_history' %}"><i class="fas fa-chalkboard-teacher me-2"></i>Profes Pro : {{profile.CP_usage.count}}%</a>
+                <hr>
+                <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: {{profile.CP_usage.count}}%;" ></div>
+                  </div>
+            </div>
+        </div>
+        <div class="col m-1 p-1 ">
+            <div class="usage">
+                <div class="usage-logo">
+                    <img src="{% static 'defaults/icon/ats.png' %}"  alt="">
+                </div>
+                <a href="{% url 'ats_history' %}"><i class="fas fa-tasks me-2"></i>ATS : {{profile.ATS_usage.count}}%</a>
+                <hr>
+                <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: {{profile.ATS_usage.count}}%;" ></div>
+                  </div>
+            </div>
+        </div>
+
+        <div class="col m-1 p-1 ">
+            <div class="usage">
+                <div class="usage-logo">
+                    <img src="{% static 'defaults/icon/smcg.png' %}"  alt="">
+                </div>
+                <a class="nav-link" href="{% url 'feed360' %}"><i class="fas fa-sync-alt me-2"></i>Feed 360°</a>
+                <hr>
+                <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: {{profile.SMCG_usage.count}}%;" ></div>
+                  </div>
+            </div>
+        </div>
+        {% endif %}
+        
+
+    </div>
+  </div>
+
+<br>
+
+<br>
+<div class="container item-center his">
+    {% if profile.ATS_usage.all %}
+    <h3>Aplicant Tracking System Records</h3>
+    <hr class="container">
+
+      <table id="recordsindex" class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Resume</th>
+              <td scope="col">Links</td>
+              <td scope="col">Rating</td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in profile.ATS_usage.all %}
+            <tr>
+              <th scope="row">ATS{{i.id}}</th>
+              <td style="text-align: start; padding-left: 1em;"><a class="uid" target="_blank" href="{{i.file.url}}" ><i class="fa fa-file" ></i>&emsp;click to view..</a></td>
+              <td><a href="{% url 'ats_record' i.id %}">view all</a></td>
+              <td>{{i.rating}}</td>
+          </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <br><br>
+        {% endif %}
+
+    
+    {% if profile.CG_usage.all %}
+    <h3>Path Pilot Records</h3>
+    <hr class="container">
+    <table id="recordsindex2" class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">Job</th>
+            <td scope="col">Links</td>
+            <td scope="col">Created</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in profile.CG_usage.all %}
+          <tr>
+            <th scope="row">CG{{i.id}}</th>
+            <td >{{i.jd}}</td>
+            <td><a href="{% url 'cg_record' i.id %}">view all</a></td>
+            <td>{{i.created}}</td>
+        </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <br><br>
+      {% endif %}
+
+
+      {% if profile.CP_usage.all and user.is_staff %}
+    <h3>Profes Pro Records</h3>
+    <hr class="container">
+    <table id="recordsindex2" class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Branch</th>
+            <td scope="col">Links</td>
+            <td scope="col">Created</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in profile.CP_usage.all %}
+          <tr>
+            <th scope="row">CP{{i.id}}</th>
+            <td>{{i.subject}}</td>
+            <td>{{i.sbranch}}</td>
+            <td><a href="{% url 'cp_record' i.id %}" class="view">view all</a></td>
+            <td>{{i.created}}</td>
+        </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <br><br>
+      {% endif %}
+
+      
+
+      {% if profile.SMCG_usage.all %}
+      <h3>SMCG Records</h3>
+    <hr class="container">
+    <table id="recordsindex3" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Topic</th>
+                <td scope="col">Resource</td>
+                <td scope="col">created</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in profile.SMCG_usage.all %}
+            <tr>
+                <th scope="row">SMCG{{i.id}} </th>
+                <td>{{i.topic}} <i></i> </td>
+                {% if i.is_image is True and i.output_image %}
+
+                <td>
+                    <a class="uid" target="_blank" href="{{i.output_image.url}}"
+                        ><i class="fas fa-image"></i></a
+                    >
+                    <div hidden id="smcg{{i.id}}">{{i.responce}}</div>
+                    <button
+                        id="cpybutton"
+                        onclick="copy_text('smcg{{i.id}}')"
+                        class="btn btn-flat"
+                    >
+                    <i class="far fa-clipboard"></i> Click to copy!!
+                    </button>
+                </td>
+                {% else %}
+                <td>
+                    <div hidden id="smcg{{i.id}}">{{i.responce}}</div>
+                    <button
+                        id="cpybutton"
+                        onclick="copy_text('smcg{{i.id}}')"
+                        class="btn btn-flat"
+                    >
+                    <i class="far fa-clipboard"></i> <small> Click to Copy</small>
+
+                    </button>
+                </td>
+                {% endif %}
+                <td>{{i.created}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    {% endif %}
+
+  </div>
+
+
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <img src="https://www.mjvinnovation.com/wp-content/uploads/2021/07/mjv_blogpost_redes_neurais_ilustracao_cerebro-01-1024x1020.png" style="width: 15px;" class="rounded me-2" alt="...">
+        <strong class="me-auto">Notification</strong>
+        <small>now</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body" id="toast_message">
+      </div>
+    </div>
+  </div>
+  
+  <script>
+      var opt = {
+              animation : true,
+              delay : 4000,
+              autohide:true,
+          }
+      function toast_show(text){
+          document.getElementById("toast_message").innerText = text;
+          var tost_html = document.getElementById("liveToast");
+          var toast = new bootstrap.Toast(tost_html,opt);
+          toast.show();
+      }
+  
+      function copy_text(id) {
+          console.log(id)
+          var text = document.getElementById(id).innerText;
+          copyToClipboard(text);
+      }
+  
+      function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text)
+              .then(() => {                
+                  toast_show("Text copied to clipboard");
+  
+              })
+              .catch(err => {
+                  toast_show(`Could not copy text:${err}`)
+              });
+      } else {
+          var textArea = document.createElement("textarea");
+          textArea.value = text;
+  
+          // Make the textarea hidden
+          textArea.style.position = "fixed";
+          textArea.style.top = "0";
+          textArea.style.left = "0";
+          textArea.style.width = "0";
+          textArea.style.height = "0";
+          textArea.style.opacity = "0";
+  
+          document.body.appendChild(textArea);
+  
+          textArea.focus();
+          textArea.select();
+  
+          try {
+              // Execute the copy command
+              var successful = document.execCommand('copy');
+              var message = successful ? 'Copied to clipboard' : 'Unable to copy to clipboard';
+              toast_show(message);
+  
+          } catch (err) {
+              toast_show(`Could not copy text:${err}`)
+  
+          }
+  
+          document.body.removeChild(textArea);
+      }
+  
+  }
+  
+  
+  </script>
+  
+
+{% endblock %}

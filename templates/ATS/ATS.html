@@ -1,0 +1,175 @@
+
+
+
+{% extends 'base.html' %} 
+{% load static %}
+{% block title %} ATS {% endblock %} 
+{% block hero %}
+{% endblock %}
+{% block style %}
+<style>
+    
+    .item-center {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Softer, deeper shadow for depth */
+        border-radius: 12px; /* Slightly larger radius for smoother corners */
+        padding: 2.5em; /* Increased padding for spacious feel */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href="{% url 'ats' %}"> <img src="{% static 'defaults/icon/ats.png' %}" width="30" style="transform: scale(1.5);"  alt=""> ATS</a></li>
+          
+        </ol>
+      </nav>
+</div>
+<div class="container item-center">
+    <div class="row" style="margin: 10px">
+        <div class="col-md">
+            <form
+                action="POST"
+                id="ats_form"
+                enctype="multipart/form-data"
+                class="item-center"
+            >
+                {% csrf_token %}
+                
+
+                <div class="form-group">
+                    <label for="">Job Description</label>
+                    <textarea
+                        name="jd"
+                        id="jd"
+                        cols="30"
+                        required
+                        class="form-control"
+                        placeholder="Job Description"
+                        rows="10"
+                    ></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="fileInput">Choose a PDF or DOCX file:</label
+                    ><br />
+                    <input
+                        type="file"
+                        class="form-control"
+                        id="file"
+                        name="file"
+                        required
+                        accept=".pdf,.docx"
+                    /><br />
+                </div>
+
+                <div
+                    class="btn-group"
+                    style="
+                        width: 100%;
+                        justify-content: center;
+                        align-items: center;
+                    "
+                >
+                    <button
+                        class="sub-btn"
+                        id="submit"
+                        style="width: 80%"
+                        type="submit"
+                    >
+                        Check
+                    </button>
+                    <button
+                        type="reset"
+                        class="btn btn-outline-danger"
+                        style="width: 20%"
+                    >
+                        Reset
+                    </button>
+                </div>
+            </form>
+
+            <br /><br />
+        </div>
+        <div class="col-md">
+            <p>
+                <small><u>Output : </u></small>
+            </p>
+            <p><b id="rating">...</b></p>
+            <label for="">Feedback : </label>
+            <textarea
+                name=""
+                disabled
+                id="feedback"
+                cols="50"
+                rows="10"
+                placeholder="Feedback"
+                class="form-control"
+            ></textarea>
+            <br />
+            <label for="">Tips: </label>
+            <p id="tips">The tips goes Here...</p>
+        </div>
+    </div>
+</div>
+<div class="container p-2" id="desc">..!</div>
+<br /><br /><br />
+{% endblock %} {% block script %}
+<script>
+    var form = document.getElementById("ats_form");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var btn = document.getElementById("submit");
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+        btn.disable = true;
+        var formData = new FormData(document.getElementById("ats_form"));
+        console.log(formData);
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", '{% url "ats_ev" %}', true);
+
+        document.getElementById("desc").innerHTML = ``;
+        document.getElementById("tips").innerHTML = "loading ...";
+        document.getElementById("rating").innerText = `⏱️....`;
+        document.getElementById("feedback").innerText =
+            "waiting for the feedback ...";
+
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                console.log(xhr.responseText);
+                var responce = JSON.parse(xhr.responseText);
+
+                document.getElementById("tips").innerHTML = `${responce.tips}`;
+                document.getElementById(
+                    "rating"
+                ).innerText = `Rating : ${responce.score} /10.`;
+                document.getElementById("feedback").innerText =
+                    responce.myfeedback;
+
+                document.getElementById(
+                    "desc"
+                ).innerHTML = `<h3>Description : ${
+                    responce.error != "null" ? responce.error : ""
+                } </h3><br/><p>${responce.description}</p>`;
+
+                btn.innerHTML = `Check`;
+            } else {
+                console.error("Request failed. Status: " + xhr.status);
+            }
+        };
+
+        xhr.onerror = function () {
+            console.error("Request failed");
+        };
+
+        xhr.send(formData);
+    });
+</script>
+{% endblock %} 
+

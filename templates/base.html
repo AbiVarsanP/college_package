@@ -1,0 +1,1314 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CloudPlusAI{% endblock %}</title>
+    <link rel="shortcut icon" href="/media/Users/profiles/logo.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d929d31a20.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1/dist/face-api.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css">
+
+    <style>
+        :root {
+            --primary: #ffa101;
+            --dark: #1f2a44;
+            --light-gray: #f5f7fa;
+            --white: #ffffff;
+            --text: #333333;
+        }
+
+        
+
+        /* Root variables for consistent theming */
+        body {
+            font-family: 'Inter', sans-serif;
+    color: var(--text);
+    background-color: var(--light-gray);
+    margin: 0;
+    line-height: 1.6;
+    min-height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+        }
+
+        /* Header */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            width: 64px;
+            margin-right: 0.5rem;
+        }
+
+        .navbar-brand:hover {
+            color: #d88901;
+        }
+
+        .nav-link {
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .dropdown-item {
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light-gray);
+            color: var(--primary);
+        }
+
+        .navbar-nav {
+            align-items: center;
+        }
+
+        .nav-item.dropdown {
+            margin-left: 1rem;
+        }
+
+        .services-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .services-menu .nav-link {
+            margin-right: 1rem;
+        }
+
+        .services-dropdown {
+            display: none;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1 0 auto; /* Grow to fill space, don't shrink, auto basis */
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: #ffa10150;
+    width: 100%; /* Ensure main takes full width */
+    box-sizing: border-box;
+        }
+
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-danger, .alert-warning {
+            font-weight: 500;
+        }
+
+        /* Records Section */
+        .records {
+            padding: 2rem 0;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px #ffa10150;
+        }
+
+        .table {
+            border-radius: 8px;
+            width: 100%; /* Changed from max-width: 80% to full width */
+            margin: 0 auto;
+            box-shadow: 0px 0px 10px #ffa10150;
+        }
+
+        .table th {
+            background-color: var(--light-gray);
+            color: var(--dark);
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.1rem; /* Increased font size */
+            padding: 1rem; /* Increased padding */
+        }
+
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+            font-size: 1.1rem; /* Increased font size */
+            padding: 1rem; /* Increased padding */
+        }
+
+        .table a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .table a:hover {
+            text-decoration: underline;
+        }
+
+        /* Profile Completion */
+        .item-center {
+            background:#ffffff80;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            
+        }
+
+        .item-center h3 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .item-center i {
+            font-size: 5rem;
+            color: var(--primary);
+        }
+
+        .item-center a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .item-center a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .sub-btn {
+            background-color: var(--white);
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            color: var(--primary);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .sub-btn:hover {
+            background-color: rgb(230, 230, 230);
+            transform: translateY(-2px);
+            color: var(--primary);
+        }
+
+        .btn-copy {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-copy:hover {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-outline-danger {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer p {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* DataTables */
+        #records_wrapper {
+            background: none;
+            padding: 1.5rem; /* Increased padding */
+            border-radius: 8px;
+            overflow: visible;
+            width:100%;
+        }
+
+        #recordsindex2_wrapper {
+            background: none;
+            padding: 1.5rem; /* Increased padding */
+            border-radius: 8px;
+            overflow: visible;
+            width:100%;
+        }
+
+        .dt-button {
+            background-color: var(--primary) !important;
+            color: var(--white) !important;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+        }
+
+        
+
+        .page-link {
+            color: var(--primary) !important;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: var(--white) !important;
+        }
+
+        .hero {
+            background-color: #ffa201;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: black;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #fff;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+
+            .navbar-nav {
+                text-align: center;
+            }
+
+            .nav-item.dropdown {
+                margin-left: 0;
+            }
+
+            .services-menu {
+                display: none;
+            }
+
+            .services-dropdown {
+                display: block;
+            }
+
+            .table {
+                font-size: 0.9rem;
+                width: 80vw;
+            }
+
+            #records th:nth-child(1),
+            #records td:nth-child(1),
+            #records th:nth-last-child(1),
+            #records td:nth-last-child(1) {
+                display: none;
+            }
+
+            #recordsindex2_wrapper {
+                background: none;
+                padding: 1.5rem; /* Increased padding */
+                border-radius: 8px;
+                overflow: visible;
+                width:100%;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .services-menu {
+                display: flex;
+            }
+
+            .services-dropdown {
+                display: none;
+            }
+            #recordsindex2_wrapper {
+            background: none;
+            padding: 1.5rem; /* Increased padding */
+            border-radius: 8px;
+            overflow: visible;
+            width:100%;
+        }
+        }
+    </style>
+    {% block style %}{% endblock %}
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="/media/Users/profiles/logo.png" alt="CloudPlusAI Logo">
+                CloudPlusAI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    {% if user.is_superuser or profile.is_admin %}
+                    <li class="nav-item dropdown services-menu">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-users-cog me-2"></i>Admin
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'load_student' %}"><i class="fas fa-user-cog me-2"></i>Load Student</a></li>
+                            <li><a class="dropdown-item" href="{% url 'my_students' %}"><i class="fas fa-users me-2"></i>View Students</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'load_staffs' %}"><i class="fas fa-users me-2"></i>Load Staff</a></li>
+                            <li><a class="dropdown-item" href="{% url 'my_staffs' %}"><i class="fas fa-users me-2"></i>View Staffs</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'cp' %}"><i class="fas fa-chalkboard-teacher me-2"></i>Profes Pro</a>
+                    </li>
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'feed360' %}"><i class="fas fa-sync-alt me-2"></i>Feed 360°</a>
+                    </li>
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'ats' %}"><i class="fas fa-tasks me-2"></i>ATS</a>
+                    </li>
+                    <!-- <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'generate_social_media_content' %}"><i class="fas fa-edit me-2"></i>SMCG</a>
+                    </li> -->
+                    <li class="nav-item dropdown services-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Services
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if user.is_staff and profile.is_admin %}
+                            <li><a class="dropdown-item" href="{% url 'college_form' %}"><i class="fas fa-plus-circle me-2"></i>Create a new EdBud</a></li>
+                            {% endif %}
+                            {% if user.is_staff or user.is_superuser %}
+                            <li><a class="dropdown-item" href="{% url 'cp' %}"><i class="fas fa-chalkboard-teacher me-2"></i>Profes Pro</a></li>
+                            <li><a class="dropdown-item" href="{% url 'feed360' %}"><i class="fas fa-sync-alt me-2"></i>Feed 360°</a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" href="{% url 'cg' %}"><i class="fas fa-route me-2"></i>Path Pilot</a></li>
+                            <li><a class="dropdown-item" href="{% url 'linkedin' %}"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
+                            <li><a class="dropdown-item" href="{% url 'rb' %}"><i class="fas fa-file-alt me-2"></i>Resume Builder</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{% url 'ats' %}"><i class="fas fa-tasks me-2"></i>Application Tracking System</a></li>
+                            <li><a class="dropdown-item" href="{% url 'generate_social_media_content' %}"><i class="fas fa-edit me-2"></i>Social Media Content Generator</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="/media/Users/profiles/logo.png" class="profile-img" alt="Profile">
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'my_profile' %}"><i class="fas fa-user-graduate me-2"></i>My Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="dropdown-item" type="submit"><i class="fas fa-door-open me-2"></i>Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% block hero %}
+    <section class="hero">
+        <div class="container">
+            <h1>Empower Your Future with CloudPlusAI</h1>
+            <p>Discover cutting-edge tools for education, recruitment, and social media content creation.</p>
+        </div>
+    </section>
+    {% endblock %}
+
+    <div class="container">
+        {% if messages %}
+        {% for i in messages %}
+        <div class="alert alert-{{i.tags}}">{{i}}</div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    {% if not profile.check_credit %}
+    <div class="container">
+        <div class="alert alert-danger">Your Credit Balance is {{profile.balance_credit}}</div>
+        <div class="alert alert-warning">Please contact <a href="mailto:{{profile.college.user.email}}">{{profile.college.user.email}}</a></div>
+    </div>
+    {% endif %}
+
+    {% if not profile.is_completed and complete_triger %}
+    <div class="container item-center">
+        <h3>Complete Your Profile!</h3>
+        <i class="far fa-id-badge"></i>
+        <a href="{% url 'edit_profile' %}">Update Now</a>
+    </div>
+    {% else %}
+    <main>{% block main %}{% endblock %}</main>
+    {% endif %}
+
+    <footer class="footer">
+        <div class="container">
+            <p>© CloudPlusAI {% if version %}v{{version}}{% else %}v1{% endif %}. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.colVis.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $("#records").DataTable({
+                paging: true,
+                searching: true,
+                info: true,
+                responsive: true,
+                autoWidth: true,
+                pageLength: 10,
+                dom: 'B1frtip',
+                buttons: ['copy', 'excel', 'pdf', 'print'],
+                lengthMenu: [5, 10, 15, 25, 50],
+            });
+        });
+
+        $(document).ready(function () {
+            var table = $("#recordsindex").DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                lengthMenu: [5, 10, 15],
+                responsive: true,
+                autoWidth: true,
+                language: {
+                    processing: "Processing...",
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    loadingRecords: "Loading...",
+                    zeroRecords: "No matching records found",
+                    emptyTable: "No data available in table",
+                    paginate: {
+                        first: "First",
+                        previous: "Previous",
+                        next: "Next",
+                        last: "Last"
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending"
+                    }
+                },
+            });
+        });
+
+        $(document).ready(function () {
+            var table = $("#recordsindex2").DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                lengthMenu: [5, 10, 15],
+                responsive: true,
+                autoWidth: true,
+                language: {
+                    processing: "Processing...",
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    loadingRecords: "Loading...",
+                    zeroRecords: "No matching records found",
+                    emptyTable: "No data available in table",
+                    paginate: {
+                        first: "First",
+                        previous: "Previous",
+                        next: "Next",
+                        last: "Last"
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending"
+                    }
+                },
+            });
+        });
+
+        $(document).ready(function () {
+            var table = $("#recordsindex3").DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                lengthMenu: [5, 10, 15],
+                responsive: true,
+                autoWidth: true,
+                language: {
+                    processing: "Processing...",
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    loadingRecords: "Loading...",
+                    zeroRecords: "No matching records found",
+                    emptyTable: "No data available in table",
+                    paginate: {
+                        first: "First",
+                        previous: "Previous",
+                        next: "Next",
+                        last: "Last"
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending"
+                    }
+                },
+            });
+        });
+
+        $(document).ready(function () {
+            var table = $("#recordsindex4").DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                lengthMenu: [5, 10, 15],
+                responsive: true,
+                autoWidth: true,
+                language: {
+                    processing: "Processing...",
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    loadingRecords: "Loading...",
+                    zeroRecords: "No matching records found",
+                    emptyTable: "No data available in table",
+                    paginate: {
+                        first: "First",
+                        previous: "Previous",
+                        next: "Next",
+                        last: "Last"
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending"
+                    }
+                },
+            });
+        });
+    </script>
+    {% block script %}{% endblock %}
+</body>
+</html>
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CloudPlusAI{% endblock %}</title>
+    <link rel="shortcut icon" href="/media/Users/profiles/logo.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d929d31a20.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1/dist/face-api.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css">
+
+    <style>
+        :root {
+            --primary: #ffa101;
+            --dark: #1f2a44;
+            --light-gray: #f5f7fa;
+            --white: #ffffff;
+            --text: #333333;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background-color: var(--light-gray);
+            margin: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            width: 64px;
+            margin-right: 0.5rem;
+        }
+
+        .navbar-brand:hover {
+            color: #d88901;
+        }
+
+        .nav-link {
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .dropdown-item {
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light-gray);
+            color: var(--primary);
+        }
+
+        .navbar-nav {
+            align-items: center;
+        }
+
+        .nav-item.dropdown {
+            margin-left: 1rem;
+        }
+
+        .services-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .services-menu .nav-link {
+            margin-right: 1rem;
+        }
+
+        .services-dropdown {
+            display: none;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 1rem;
+            background-color: #ffa10150;
+        }
+
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-danger, .alert-warning {
+            font-weight: 500;
+        }
+
+        /* Records Section */
+        .records {
+            padding: 2rem 0;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px #ffa10150;
+        }
+
+        .table {
+            border-radius: 8px;
+            overflow: hidden;
+            width: 100%; /* Changed from max-width: 80% to full width */
+            margin: 0 auto;
+            box-shadow: 0px 0px 10px #ffa10150;
+        }
+
+        .table th {
+            background-color: var(--light-gray);
+            color: var(--dark);
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.1rem; /* Increased font size */
+            padding: 1rem; /* Increased padding */
+        }
+
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+            font-size: 1.1rem; /* Increased font size */
+            padding: 1rem; /* Increased padding */
+        }
+
+        .table a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .table a:hover {
+            text-decoration: underline;
+        }
+
+        /* Profile Completion */
+        .item-center {
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .item-center h3 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .item-center i {
+            font-size: 5rem;
+            color: var(--primary);
+        }
+
+        .item-center a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .item-center a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .sub-btn {
+            background-color: var(--white);
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            color: var(--primary);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .sub-btn:hover {
+            background-color: rgb(230, 230, 230);
+            transform: translateY(-2px);
+            color: var(--primary);
+        }
+
+        .btn-copy {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-copy:hover {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-outline-danger {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer p {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* DataTables */
+        #records_wrapper {
+            background: var(--white);
+            padding: 1.5rem; /* Increased padding */
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px #ffa10150;
+            overflow: hidden;
+        }
+
+        .dt-button {
+            background-color: var(--primary) !important;
+            color: var(--white) !important;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+        }
+
+        .page-link {
+            color: var(--primary) !important;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: var(--white) !important;
+        }
+
+        .hero {
+            background-color: #ffa201;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: black;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #fff;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+
+            .navbar-nav {
+                text-align: center;
+            }
+
+            .nav-item.dropdown {
+                margin-left: 0;
+            }
+
+            .services-menu {
+                display: none;
+            }
+
+            .services-dropdown {
+                display: block;
+            }
+
+            .table {
+                font-size: 0.9rem;
+                width: 100%;
+            }
+
+            #records th:nth-child(1),
+            #records td:nth-child(1),
+            #records th:nth-last-child(1),
+            #records td:nth-last-child(1) {
+                display: none;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .services-menu {
+                display: flex;
+            }
+
+            .services-dropdown {
+                display: none;
+            }
+        }
+    </style>
+    {% block style %}{% endblock %}
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="/media/Users/profiles/logo.png" alt="CloudPlusAI Logo">
+                CloudPlusAI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    {% if user.is_superuser or profile.is_admin %}
+                    <li class="nav-item dropdown services-menu">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-users-cog me-2"></i>Admin
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'load_student' %}"><i class="fas fa-user-cog me-2"></i>Load Student</a></li>
+                            <li><a class="dropdown-item" href="{% url 'my_students' %}"><i class="fas fa-users me-2"></i>View Students</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'load_staffs' %}"><i class="fas fa-users me-2"></i>Load Staff</a></li>
+                            <li><a class="dropdown-item" href="{% url 'my_staffs' %}"><i class="fas fa-users me-2"></i>View Staffs</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'cp' %}"><i class="fas fa-chalkboard-teacher me-2"></i>Profes Pro</a>
+                    </li>
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'feed360' %}"><i class="fas fa-sync-alt me-2"></i>Feed 360°</a>
+                    </li>
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'ats' %}"><i class="fas fa-tasks me-2"></i>ATS</a>
+                    </li>
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'generate_social_media_content' %}"><i class="fas fa-edit me-2"></i>SMCG</a>
+                    </li>
+                    <li class="nav-item dropdown services-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Services
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if user.is_staff and profile.is_admin %}
+                            <li><a class="dropdown-item" href="{% url 'college_form' %}"><i class="fas fa-plus-circle me-2"></i>Create a new EdBud</a></li>
+                            {% endif %}
+                            {% if user.is_staff or user.is_superuser %}
+                            <li><a class="dropdown-item" href="{% url 'cp' %}"><i class="fas fa-chalkboard-teacher me-2"></i>Profes Pro</a></li>
+                            <li><a class="dropdown-item" href="{% url 'feed360' %}"><i class="fas fa-sync-alt me-2"></i>Feed 360°</a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" href="{% url 'cg' %}"><i class="fas fa-route me-2"></i>Path Pilot</a></li>
+                            <li><a class="dropdown-item" href="{% url 'linkedin' %}"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
+                            <li><a class="dropdown-item" href="{% url 'rb' %}"><i class="fas fa-file-alt me-2"></i>Resume Builder</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{% url 'ats' %}"><i class="fas fa-tasks me-2"></i>Application Tracking System</a></li>
+                            <li><a class="dropdown-item" href="{% url 'generate_social_media_content' %}"><i class="fas fa-edit me-2"></i>Social Media Content Generator</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="/media/Users/profiles/logo.png" class="profile-img" alt="Profile">
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'my_profile' %}"><i class="fas fa-user-graduate me-2"></i>My Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="dropdown-item" type="submit"><i class="fas fa-door-open me-2"></i>Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Empower Your Future with CloudplusAi</h1>
+            <p>Discover cutting-edge tools for education, recruitment, and social media content creation.</p>
+        </div>
+    </section>
+
+    <div class="container">
+        {% if messages %}
+        {% for i in messages %}
+        <div class="alert alert-{{i.tags}}">{{i}}</div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    {% if not profile.check_credit %}
+    <div class="container">
+        <div class="alert alert-danger">Your Credit Balance is {{profile.balance_credit}}</div>
+        <div class="alert alert-warning">Please contact <a href="mailto:{{profile.college.user.email}}">{{profile.college.user.email}}</a></div>
+    </div>
+    {% endif %}
+
+    {% if not profile.is_completed and complete_triger %}
+    <div class="container item-center">
+        <h3>Complete Your Profile!</h3>
+        <i class="far fa-id-badge"></i>
+        <a href="{% url 'edit_profile' %}">Update Now</a>
+    </div>
+    {% else %}
+    <main>{% block main %}{% endblock %}</main>
+    {% endif %}
+
+    <footer class="footer">
+        <div class="container">
+            <p>© CloudPlusAI {% if version %}v{{version}}{% else %}v1{% endif %}. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.colVis.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $("#records").DataTable({
+                paging: true,
+                searching: true,
+                info: true,
+                responsive: true,
+                autoWidth: true,
+                pageLength: 10,
+                dom: 'B1frtip',
+                buttons: ['copy', 'excel', 'pdf', 'print'],
+                lengthMenu: [5, 10, 15, 25, 50],
+            });
+        });
+
+        $(document).ready(function () {
+            var table = $("#recordsindex").DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                lengthMenu: [5, 10, 15],
+                responsive: true,
+                autoWidth: true,
+                language: {
+                    processing: "Processing...",
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    loadingRecords: "Loading...",
+                    zeroRecords: "No matching records found",
+                    emptyTable: "No data available in table",
+                    paginate: {
+                        first: "First",
+                        previous: "Previous",
+                        next: "Next",
+                        last: "Last"
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending"
+                    }
+                },
+            });
+        });
+
+        $(document).ready(function () {
+            var table = $("#recordsindex2").DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                lengthMenu: [5, 10, 15],
+                responsive: true,
+                autoWidth: true,
+                language: {
+                    processing: "Processing...",
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    loadingRecords: "Loading...",
+                    zeroRecords: "No matching records found",
+                    emptyTable: "No data available in table",
+                    paginate: {
+                        first: "First",
+                        previous: "Previous",
+                        next: "Next",
+                        last: "Last"
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending"
+                    }
+                },
+            });
+        });
+
+        $(document).ready(function () {
+            var table = $("#recordsindex3").DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                lengthMenu: [5, 10, 15],
+                responsive: true,
+                autoWidth: true,
+                language: {
+                    processing: "Processing...",
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    loadingRecords: "Loading...",
+                    zeroRecords: "No matching records found",
+                    emptyTable: "No data available in table",
+                    paginate: {
+                        first: "First",
+                        previous: "Previous",
+                        next: "Next",
+                        last: "Last"
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending"
+                    }
+                },
+            });
+        });
+
+        $(document).ready(function () {
+            var table = $("#recordsindex4").DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                lengthMenu: [5, 10, 15],
+                responsive: true,
+                autoWidth: true,
+                language: {
+                    processing: "Processing...",
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    loadingRecords: "Loading...",
+                    zeroRecords: "No matching records found",
+                    emptyTable: "No data available in table",
+                    paginate: {
+                        first: "First",
+                        previous: "Previous",
+                        next: "Next",
+                        last: "Last"
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending"
+                    }
+                },
+            });
+        });
+    </script>
+    {% block script %}{% endblock %}
+</body>
+</html> {% endcomment %}

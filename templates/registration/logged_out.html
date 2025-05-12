@@ -1,0 +1,85 @@
+{% extends 'auth_base.html' %} 
+{% block hero %}
+{% endblock %}
+{% block main %}
+
+<style>
+    h3{
+        color: var(--c2);
+        font-family: 'Inter', sans-serif; /* Modern, clean font */
+        font-weight: 600; /* Semi-bold for modern look */
+        font-size: 1.75rem; /* Larger for prominence */
+        text-align: center; /* Maintain centered alignment */
+        letter-spacing: 0.5px; /* Subtle spacing for elegance */
+        padding-bottom: 0.5em; /* Space for visual breathing room */
+    }
+    .container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        
+    }
+
+    i,a{
+        text-align: center;
+        color: #ffa101; /* Primary color for icons and links */
+        transition: color 0.2s ease;
+        
+    }
+    .fa-frown-open,.fa-theater-masks{
+        font-size: 300px;    
+    }
+    a{
+        text-decoration: none; /* Clean look */
+        font-family: 'Inter', sans-serif; /* Consistent modern font */
+        font-size: 1rem; /* Standard size for readability */
+        font-weight: 500;
+
+    }
+    .fa-user-lock{
+        color: red;
+    }
+    .fa-user-lock:hover{
+        color: white;
+    }
+
+    .fa-frown-open, .fa-theater-masks {
+        font-size: 200px; /* Slightly reduced for balance, still large for impact */
+        color: #ffa101; /* Primary color for consistency */
+        margin-bottom: 1rem; /* Space below icons */
+        transition: transform 0.3s ease, color 0.2s ease; /* Smooth hover effects */
+    }
+    .fa-frown-open:hover, .fa-theater-masks:hover {
+        transform: scale(1.05); /* Subtle zoom on hover */
+        color: #ff8c00; /* Darker shade for interactivity */
+    }
+    
+    .fa-user-lock {
+        color: #e74c3c; /* Modern red shade for better contrast */
+        font-size: 1.5rem; /* Reasonable size for icon */
+        transition: color 0.2s ease, transform 0.3s ease; /* Smooth transitions */
+    }
+    .fa-user-lock:hover {
+        color: #ffa101; /* Switch to primary color on hover instead of white */
+        transform: scale(1.1); /* Subtle zoom for interactivity */
+    }
+</style>
+
+<div class="container item-center">
+    {% if user.is_authenticated %}
+    <h3>Come back again!! </h3>
+    <i class="far fa-frown-open"></i>
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger" >Are you want to Logout <i class="fas fa-user-lock"></i></button>
+    </form>
+    
+    {% else %}
+    <h3>Until We Meet Again! </h3>
+    <i class="fas fa-theater-masks"></i>
+    <a href="{% url 'login' %}"><i class="fas fa-plane-arrival"></i>Login</a>
+    {% endif %}
+</div>
+{% endblock %}

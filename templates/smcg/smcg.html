@@ -1,0 +1,263 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block title %} SMCG {% endblock %} 
+{% block style%}
+
+<style>
+    .item-center {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        backdrop-filter: blur(8px);
+    }
+</style>
+
+{% endblock %} 
+
+
+{% block main %}
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href="{% url 'generate_social_media_content' %}"> <img src="{% static 'defaults/icon/smcg.png' %}" width="30" style="transform: scale(1.5);"  alt=""> SMCG</a></li>
+          
+        </ol>
+      </nav>
+</div>
+
+<div class="container item-center">
+    <div class="row" style="margin: 10px">
+        <div class="col-md">
+            <form
+                action="POST"
+                id="smcg_form"
+                enctype="multipart/form-data"
+                class=""
+            >
+                {% csrf_token %}
+                {% if user.is_staff %}
+                <div class="form-group">
+                    <label for="">UID</label>
+                    <select
+                        type="text"
+                        placeholder="xxxxx-xxxx-xxxx-xxx"
+                        name="uuid"
+                        id="uuid"
+                        class="form-control"
+                    >
+                        {% for i in uids %}
+                        <option value="{{i.uid}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% else %}
+                <input type="hidden" name="uuid" id="uuid" value="None">
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="">Platform</label>
+                    <select name="platform" id="platform" class="form-control">
+                        {% for i in platform %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Post Type</label>
+                    <select
+                        name="post_type"
+                        id="post_type"
+                        class="form-control"
+                    >
+                        {% for i in types %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Goal</label>
+                    <select
+                        name="goal"
+                        id="goal"
+                        class="form-control"
+                        onchange="getTopic()"
+                    >
+                        {% for i in goals %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="topic">Topic</label>
+                    <select name="topic" id="topic" class="form-control">
+                        <option value="None" default>Select Goal</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <textarea
+                        type="text"
+                        name="des"
+                        id="des"
+                        rows="5"
+                        placeholder="Any Specfic Details"
+                        class="form-control"
+                    ></textarea>
+                </div>
+                {% if user.is_staff or  user.is_superuser %}
+                <div class="form-group"
+                >
+                    <input type="checkbox"  name="past" id="past" />
+                    <label for="">&spades; Generate Using Previous Data?</label>
+                </div>
+                
+                {% else %}
+                <div class="form-group"
+                 hidden>
+                    <input type="checkbox"  name="past" id="past" />
+                    <label for="">&spades; Generate Using Previous Data?</label>
+                </div>
+                {% endif %}
+                <div
+                    class="btn-group"
+                    style="
+                        width: 100%;
+                        justify-content: center;
+                        align-items: center;
+                    "
+                >
+                    <button
+                        class="sub-btn"
+                        id="submit"
+                        style="width: 80%"
+                        type="submit"
+                    >
+                        Generate
+                    </button>
+                    <button
+                        type="reset"
+                        class="btn btn-outline-danger"
+                        style="width: 20%"
+                    >
+                        RESET
+                    </button>
+                </div>
+            </form>
+            <br /><br />
+        </div>
+        <div class="col-md">
+            <p>Output:</p>
+            <div id="output">
+                <textarea
+                    name=""
+                    value=""
+                    id="outputTextarea"
+                    cols="50"
+                    rows="20"
+                    placeholder="The output Text comes Here..."
+                    class="form-control"
+                ></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="desc"></div>
+</div>
+
+
+{% endblock %} {% block script %}
+<script>
+    function getTopic() {
+        var goal = document.getElementById("goal");
+        var topic = document.getElementById("topic");
+
+        fetch("{% url 'about_post' %}", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((responce) => responce.json())
+            .then((data) => {
+                const topics = data[goal.value];
+                topic.innerHTML = "";
+                topics.forEach((i) => {
+                    topic.innerHTML += `<option value="${i}">${i}</option>`;
+                });
+            })
+            .catch((err) => alert(err));
+    }
+</script>
+
+<script>
+    var form = document.getElementById("smcg_form");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var btn = document.getElementById("submit");
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+        btn.disable = true;
+        var check = document.getElementById("post_type").value;
+
+        if (check !== "Image") {
+            document.getElementById(
+                "output"
+            ).innerHTML = `<textarea name="" value="Just a Second .. I am Generating..." id="outputTextarea" cols="50" rows="20" placeholder="The output Text comes Here..." class="form-control"></textarea>`;
+        } else {
+            document.getElementById("output").innerHTML =
+                "<p>The image is generating</p>";
+        }
+
+        document.getElementById("desc").innerText = "";
+
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value);
+        data.append("uuid", e.target.uuid.value);
+        data.append("platform", e.target.platform.value);
+        data.append("post_type", e.target.post_type.value);
+        data.append("goal", e.target.goal.value);
+        data.append("topic", e.target.topic.value);
+        data.append("des", e.target.des.value);
+        data.append("past",document.getElementById("past").checked)
+
+        console.log(data);
+        console.log(check);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '{% url "gen_smcg" %}', true);
+
+        xhr.send(data);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    btn.disable = false;
+                    btn.innerHTML = "Generate";
+                    var responce = JSON.parse(xhr.responseText);
+                    console.log(responce);
+
+                    if (responce.image !== false) {
+                        document.getElementById(
+                            "output"
+                        ).innerHTML = `<img width="80%" src="${responce.image}" alt="image.jpg"> <br/> <a href="${responce.image}" download>Download</a> `;
+                        document.getElementById(
+                            "desc"
+                        ).innerHTML = `Description:<br/><p>${responce.output}</p>`;
+                    } else {
+                        document.getElementById("outputTextarea").value =
+                            responce.output;
+                    }
+                } else {
+                    console.error("Form submission error:", xhr.status);
+                }
+            }
+        };
+    });
+</script>
+{% endblock %}
