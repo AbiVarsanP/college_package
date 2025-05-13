@@ -1,89 +1,191 @@
 {% extends "base.html" %}
 {% load static %}
-{% block hero %}
-{% endblock %}
+
 {% block title %} Path Pilot {% endblock %}
- 
-{% block style %}
-<style>
-    .item-center {
-        border: 0.5px dashed var(--c2);
-        border-radius: 5px;
-        padding: 1em;
-        background-color: white;
-    }
-    .output-container {
-        background-color: whitesmoke;
-    }
-    .roadmap-container {
-        border: 1px dotted rgba(128, 128, 128, 0.351);
-        padding: 5px;
-    }
-    h6 a {
-        color: var(--c3);
-    }
-    h3 {
-        color: var(--c2);
-        border-bottom: 1px dotted var(--c2);
-        font-family: var(--fnt);
-        letter-spacing: 1px;
-        text-align: center;
-    }
-    .year-container p strong {
-        color: green;
-        text-decoration: underline;
-    }
-    li a {
-        color: var(--c3);
-    }
-</style>
+{% block hero %}
 {% endblock %} 
 
+{% block style %}
+<style>
+    :root {
+        --primary: #ffa101;
+        --dark: #1f2a44;
+        --light-gray: #f5f7fa;
+        --white: #ffffff;
+        --text: #333333;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        color: var(--text);
+        background-color: #ffa10150;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .item-center {
+        border-radius: 15px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .item-center h3 {
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .form-container {
+        background-color: #ffffff80;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        width: 100%;
+        
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 8px rgba(255, 161, 1, 0.2);
+        outline: none;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .sub-btn {
+        background-color: var(--white);
+        border: none;
+        padding: 0.75rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        border-radius: 8px;
+        color: var(--primary);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .sub-btn:hover {
+        background-color: rgb(230, 230, 230);
+        transform: translateY(-2px);
+        color: var(--primary);
+    }
+
+    .btn-outline-danger {
+        border: 1px solid #dc3545;
+        color: #dc3545;
+        font-weight: 500;
+        border-radius: 8px;
+        padding: 0.75rem 2rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: var(--white);
+        transform: translateY(-2px);
+    }
+
+    .breadcrumb {
+        background-color: var(--white);
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .breadcrumb-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #d88901;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .item-center {
+            padding: 1.5rem;
+        }
+
+        .form-container {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block main %}
-
 <div class="container">
-    
-    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
-    
-          <li class="breadcrumb-item "><a style="color:var(--c3); text-decoration: none;"href="{% url 'feed360' %}"> <img src="{% static 'defaults/icon/pp.png' %}" width="30" style="transform: scale(1.5);"  alt=""> Feed 360&deg;</a></li>
-          <li class="breadcrumb-item "><a style="color:var(--c3); text-decoration: none;"href="{% url 'create_form' form_id %}"> <img src="{% static 'defaults/icon/pp.png' %}" width="30" style="transform: scale(1.5);"  alt=""> Create Form</a></li>
-          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href=""> Add Question </a></li>
-          
+            <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{% url 'feed360' %}"><img src="{% static 'defaults/icon/pp.png' %}" width="30" style="transform: scale(1.5);" alt=""> Feed 360°</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'create_form' form_id %}"><img src="{% static 'defaults/icon/pp.png' %}" width="30" style="transform: scale(1.5);" alt=""> Create Form</a></li>
+            <li class="breadcrumb-item active"><a href="">Add Question</a></li>
         </ol>
-      </nav>
+    </nav>
 </div>
 
 <div class="container item-center">
-
+    <h3>Add Question</h3>
     <div class="row">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="btn-group" style="width: 100%;">
-                <button type="submit" class="btn sub-btn">Add Question</button>
-                <button type="reset" class="btn btn-outline-danger">RESET</button>
-            </div>
-        </form>
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="btn-group">
+                    <button type="submit" class="sub-btn">Add Question</button>
+                    <button type="reset" class="btn-outline-danger">RESET</button>
+                </div>
+            </form>
+        </div>
     </div>
-
 </div>
-{% endblock %} {% block script %}
+{% endblock %}
+
+{% block script %}
 <script>
-    
     var form = document.getElementById("cg_form");
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         var btn = document.getElementById("submit");
         btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
-        btn.disable = true;
-        scrollToTop();
+        btn.disabled = true;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         var data = new FormData();
         data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value);
-
         data.append("sbranch", e.target.sbranch.value);
         data.append("sub", e.target.sub.value);
         data.append("syllabus", e.target.syllabus.value);
@@ -93,27 +195,21 @@
         document.getElementById("output-container").innerHTML = "";
         console.log(data);
 
-        document.getElementById(
-            "outtit"
-        ).innerText = `Generating Map For ${e.target.sub.value}.`;
+        document.getElementById("outtit").innerText = `Generating Map For ${e.target.sub.value}.`;
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", '{% url "course_map" %}', true);
-
         xhr.send(data);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    btn.disable = false;
+                    btn.disabled = false;
                     btn.innerHTML = "Generate";
-                    var responce = JSON.parse(xhr.responseText);
-                    // displayContent(responce);
-                    load_DOM(responce);
-                    document.getElementById(
-                        "outtit"
-                    ).innerText = `Courses Map for ${e.target.sub.value}.`;
-                    console.log(responce);
+                    var response = JSON.parse(xhr.responseText);
+                    load_DOM(response);
+                    document.getElementById("outtit").innerText = `Courses Map for ${e.target.sub.value}.`;
+                    console.log(response);
                 } else {
                     console.error("Form submission error:", xhr.status);
                     btn.innerHTML = `Error [${xhr.status}]`;
@@ -121,7 +217,5 @@
             }
         };
     });
-
-    
 </script>
 {% endblock %}

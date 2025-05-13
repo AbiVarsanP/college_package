@@ -1,175 +1,431 @@
-
-
-
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% load static %}
-{% block title %} ATS {% endblock %} 
+{% block title %} ATS {% endblock %}
 {% block hero %}
 {% endblock %}
 {% block style %}
 <style>
+    :root {
+        --primary: #ffa101;
+        --dark: #1f2a44;
+        --light-gray: #f5f7fa;
+        --white: #ffffff;
+        --text: #333333;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        color: var(--text);
+        background-color: #ffa10150;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .navbar {
+        background-color: var(--white);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        padding: 1rem 0;
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+    }
+
     
-    .item-center {
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Softer, deeper shadow for depth */
-        border-radius: 12px; /* Slightly larger radius for smoother corners */
-        padding: 2.5em; /* Increased padding for spacious feel */
-        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+
+    .navbar-brand:hover {
+        color: #d88901;
+    }
+
+    .nav-link {
+        color: var(--text);
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: var(--primary);
+    }
+
+    .profile-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid var(--primary);
+    }
+
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .dropdown-item {
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: var(--light-gray);
+        color: var(--primary);
+    }
+
+    .navbar-nav {
+        align-items: center;
+    }
+
+    .nav-item.dropdown {
+        margin-left: 1rem;
+    }
+
+    .services-menu {
+        display: flex;
+        align-items: center;
+    }
+
+    .services-menu .nav-link {
+        margin-right: 1rem;
+    }
+
+    .services-dropdown {
+        display: none;
+    }
+
+    .main-content {
+        padding: 2rem;
+    }
+
+    .course-info-card {
+        border-radius: 15px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .course-info-card h3 {
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .content-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: space-between;
+    }
+
+    .form-container {
+        flex: 1;
+        min-width: 300px;
+        background-color: #ffffff80;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .output-container {
+        flex: 1;
+        min-width: 300px;
+        background-color: #ffffff80;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 8px rgba(255, 161, 1, 0.2);
+        outline: none;
+    }
+
+    .btn-primary {
+        background-color: var(--white);
+        border: none;
+        padding: 0.75rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        border-radius: 8px;
+        color: var(--primary);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: rgb(230, 230, 230);
+        transform: translateY(-2px);
+        color: var(--primary);
+    }
+
+    .btn-outline-danger {
+        border: 1px solid #dc3545;
+        color: #dc3545;
+        font-weight: 500;
+        border-radius: 8px;
+        padding: 0.75rem 2rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: var(--white);
+        transform: translateY(-2px);
+    }
+
+    .output-container h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    #outtit {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .breadcrumb {
+        background-color: var(--white);
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .breadcrumb-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #d88901;
+        text-decoration: underline;
+    }
+
+    .toast {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .toast-header {
+        background-color: var(--white);
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    @media (max-width: 768px) {
+        .main-content {
+            padding: 1.5rem;
+        }
+
+        .course-info-card {
+            padding: 1.5rem;
+        }
+
+        .form-container, .output-container {
+            min-width: 100%;
+            padding: 1.5rem;
+        }
+
+        .content-row {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.25rem;
+        }
+
+        .navbar-nav {
+            text-align: center;
+        }
+
+        .nav-item.dropdown {
+            margin-left: 0;
+        }
+
+        .services-menu {
+            display: none;
+        }
+
+        .services-dropdown {
+            display: block;
+        }
+    }
+
+    @media (min-width: 769px) {
+        .services-menu {
+            display: flex;
+        }
+
+        .services-dropdown {
+            display: none;
+        }
     }
 </style>
 {% endblock %}
 
 {% block main %}
-<div class="container">
-    
-    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+<div class="main-content">
+    <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
-    
-          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href="{% url 'ats' %}"> <img src="{% static 'defaults/icon/ats.png' %}" width="30" style="transform: scale(1.5);"  alt=""> ATS</a></li>
-          
+            <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active"><a href="{% url 'ats' %}"><i class="fas fa-briefcase" style="color: var(--primary); font-size: 15px; padding: 2px;"></i> ATS</a></li>
         </ol>
-      </nav>
-</div>
-<div class="container item-center">
-    <div class="row" style="margin: 10px">
-        <div class="col-md">
-            <form
-                action="POST"
-                id="ats_form"
-                enctype="multipart/form-data"
-                class="item-center"
-            >
-                {% csrf_token %}
-                
+    </nav>
 
+    <div class="course-info-card">
+        <h3>Application Tracking System</h3>
+        <div class="content-row">
+            <div class="form-container">
+                <form action="POST" id="ats_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="file">Choose a PDF or DOCX file:</label>
+                        <input type="file" class="form-control" id="file" name="file" required accept=".pdf,.docx" />
+                    </div>
+                    <div class="form-group">
+                        <label for="jd">Job Description</label>
+                        <textarea name="jd" id="jd" cols="30" required class="form-control" placeholder="Job Description" rows="10"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-center gap-3">
+                        <button class="btn btn-primary" id="submit" type="submit">Check</button>
+                        <button type="reset" class="btn btn-outline-danger">Reset</button>
+                    </div>
+                </form>
+            </div>
+            <div class="output-container">
+                <p id="outtit">Resume Evaluation Results</p>
                 <div class="form-group">
-                    <label for="">Job Description</label>
-                    <textarea
-                        name="jd"
-                        id="jd"
-                        cols="30"
-                        required
-                        class="form-control"
-                        placeholder="Job Description"
-                        rows="10"
-                    ></textarea>
+                    <label for="rating">Rating:</label>
+                    <p id="rating">...</p>
                 </div>
-
-                <div class="mb-3">
-                    <label for="fileInput">Choose a PDF or DOCX file:</label
-                    ><br />
-                    <input
-                        type="file"
-                        class="form-control"
-                        id="file"
-                        name="file"
-                        required
-                        accept=".pdf,.docx"
-                    /><br />
+                <div class="form-group">
+                    <label for="feedback">Feedback:</label>
+                    <textarea name="feedback" disabled id="feedback" cols="50" rows="5" placeholder="Feedback" class="form-control"></textarea>
                 </div>
-
-                <div
-                    class="btn-group"
-                    style="
-                        width: 100%;
-                        justify-content: center;
-                        align-items: center;
-                    "
-                >
-                    <button
-                        class="sub-btn"
-                        id="submit"
-                        style="width: 80%"
-                        type="submit"
-                    >
-                        Check
-                    </button>
-                    <button
-                        type="reset"
-                        class="btn btn-outline-danger"
-                        style="width: 20%"
-                    >
-                        Reset
-                    </button>
+                <div class="form-group">
+                    <label for="tips">Tips:</label>
+                    <p id="tips">The tips goes here...</p>
                 </div>
-            </form>
-
-            <br /><br />
+            </div>
         </div>
-        <div class="col-md">
-            <p>
-                <small><u>Output : </u></small>
-            </p>
-            <p><b id="rating">...</b></p>
-            <label for="">Feedback : </label>
-            <textarea
-                name=""
-                disabled
-                id="feedback"
-                cols="50"
-                rows="10"
-                placeholder="Feedback"
-                class="form-control"
-            ></textarea>
-            <br />
-            <label for="">Tips: </label>
-            <p id="tips">The tips goes Here...</p>
+    </div>
+
+    <div class="course-info-card" id="desc">
+        <h3>Description</h3>
+        <p>..!</p>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="https://www.mjvinnovation.com/wp-content/uploads/2021/07/mjv_blogpost_redes_neurais_ilustracao_cerebro-01-1024x1020.png" style="width: 15px;" class="rounded me-2" alt="Neuraa">
+                <strong class="me-auto">Notification</strong>
+                <small>now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast_message"></div>
         </div>
     </div>
 </div>
-<div class="container p-2" id="desc">..!</div>
-<br /><br /><br />
-{% endblock %} {% block script %}
+{% endblock %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <script>
+    var opt = {
+        animation: true,
+        delay: 4000,
+        autohide: true,
+    };
+
+    function toast_show(text) {
+        document.getElementById("toast_message").innerText = text;
+        var tost_html = document.getElementById("liveToast");
+        var toast = new bootstrap.Toast(tost_html, opt);
+        toast.show();
+    }
+
     var form = document.getElementById("ats_form");
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         var btn = document.getElementById("submit");
-        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
-        btn.disable = true;
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Checking`;
+        btn.disabled = true;
+
         var formData = new FormData(document.getElementById("ats_form"));
-        console.log(formData);
 
         var xhr = new XMLHttpRequest();
-
         xhr.open("POST", '{% url "ats_ev" %}', true);
 
         document.getElementById("desc").innerHTML = ``;
-        document.getElementById("tips").innerHTML = "loading ...";
+        document.getElementById("tips").innerHTML = "Loading ...";
         document.getElementById("rating").innerText = `⏱️....`;
-        document.getElementById("feedback").innerText =
-            "waiting for the feedback ...";
+        document.getElementById("feedback").innerText = "Waiting for the feedback ...";
+        document.getElementById("outtit").innerText = "Generating Resume Evaluation...";
 
         xhr.onload = function () {
+            btn.disabled = false;
+            btn.innerHTML = `Check`;
             if (xhr.status >= 200 && xhr.status < 300) {
-                console.log(xhr.responseText);
-                var responce = JSON.parse(xhr.responseText);
-
-                document.getElementById("tips").innerHTML = `${responce.tips}`;
-                document.getElementById(
-                    "rating"
-                ).innerText = `Rating : ${responce.score} /10.`;
-                document.getElementById("feedback").innerText =
-                    responce.myfeedback;
-
-                document.getElementById(
-                    "desc"
-                ).innerHTML = `<h3>Description : ${
-                    responce.error != "null" ? responce.error : ""
-                } </h3><br/><p>${responce.description}</p>`;
-
-                btn.innerHTML = `Check`;
+                var response = JSON.parse(xhr.responseText);
+                document.getElementById("tips").innerHTML = `${response.tips}`;
+                document.getElementById("rating").innerText = `Rating: ${response.score} /10`;
+                document.getElementById("feedback").innerText = response.myfeedback;
+                document.getElementById("desc").innerHTML = `<h3>Description</h3><p>${response.error != "null" ? response.error : ""}</p><p>${response.description}</p>`;
+                document.getElementById("outtit").innerText = "Resume Evaluation Results";
+                toast_show("Resume evaluation completed successfully!");
             } else {
-                console.error("Request failed. Status: " + xhr.status);
+                document.getElementById("rating").innerText = `Error [${xhr.status}]`;
+                document.getElementById("outtit").innerText = "Error in Resume Evaluation";
+                toast_show(`Error evaluating resume: ${xhr.status}`);
             }
         };
 
         xhr.onerror = function () {
-            console.error("Request failed");
+            btn.disabled = false;
+            btn.innerHTML = `Check`;
+            document.getElementById("rating").innerText = `Error [Network]`;
+            document.getElementById("outtit").innerText = "Network Error";
+            toast_show("Network error during resume evaluation.");
         };
 
         xhr.send(formData);
     });
 </script>
-{% endblock %} 
-
+{% endblock %}

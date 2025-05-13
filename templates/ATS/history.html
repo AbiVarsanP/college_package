@@ -2,20 +2,39 @@
 <!-- TODO Histry -->
 {% block hero %}
 {% endblock %}
+{% block style %}
+<style>
+    .breadcrumb {
+        background-color: var(--white);
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
 
+    .breadcrumb-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
 
+    .breadcrumb-item a:hover {
+        color: #d88901;
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
 {% block main %}
 
 
 <div class="container">
     
-  <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
-  
-        <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'ats' %}">ATS</a></li>
-        <li class="breadcrumb-item active"><a style="color:var(--c2); text-decoration: none;" href="{% url 'ats_history' %}">Records</a></li>
-      </ol>
+  <nav aria-label="breadcrumb">
+        <ol class="breadcrumb ">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href="{% url 'ats' %}">  ATS</a></li>
+          <li class="breadcrumb-item active"><a style="color:var(--primary); font-size: 15px; padding: 2px;" href="{% url 'ats_history' %}">Records</a></li>
+        </ol>
     </nav>
   </div>
 <div class="container item-center">
