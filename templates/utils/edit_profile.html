@@ -3,57 +3,144 @@
 {% block hero %}
 {% endblock %}
 {% block title %} My Profile {% endblock %} 
-{% block style%}
-
+{% block style %}
 <style>
-    .item-center,.avatar {
-        border: 0.5px dashed var(--c2);
-        border-radius: 5px;
-        padding: 1em;
-        background-color: white;
-    }
-    
-    .avatar{
-        width: 60%;
-        
-    }
-    td{
-        text-align: start;
-    }
-    .profile{
+    .profile-container {
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
+        min-height: 80vh;
+        padding: 2rem;
     }
-    .btn-group{
+
+    .profile-card {
+        background-color: #ffffff80;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
         width: 100%;
+        max-width: 500px;
+        transition: transform 0.2s ease-in-out;
     }
 
-    
+    .profile-card:hover {
+        transform: translateY(-5px);
+    }
 
+    .avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 1.5rem;
+        display: block;
+        border: 3px solid #e0e0e0;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-success {
+        border-color: #28a745;
+        color: #28a745;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .btn-outline-info {
+        border-color: #17a2b8;
+        color: #17a2b8;
+    }
+
+    .btn-outline-info:hover {
+        background-color: #17a2b8;
+        color: #fff;
+    }
+
+    .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .fas {
+        margin-right: 0.5rem;
+    }
 </style>
-
 {% endblock %} 
 
-
 {% block main %}
-
-<div class="container item-center">
-
-
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{form.as_p}}
-        <div class="btn-group" role="group" aria-label="Basic outlined example">
-            <button type="submit"  type="submit" class="btn btn-outline-success"><i class="fas fa-skiing-nordic text-success"></i>Save</button>
-            <a type="button" href="{% url 'password_change' %}" class="btn btn-outline-info"><i class="fas fa-key text-info"></i> Change Password</a>
-            <a type="button" href="{% url 'my_profile' %}" class="btn btn-outline-danger"><i class="fas fa-arrow-left text-danger"></i> Profile</a>
-        
-        </div>
-    </form>
-    
+<div class="profile-container">
+    <div class="profile-card">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <small class="text-danger">{{ field.errors }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="btn-group">
+                <button type="submit" class="btn btn-outline-success">
+                    <i class="fas fa-skiing-nordic"></i> Save
+                </button>
+                <a href="{% url 'password_change' %}" class="btn btn-outline-info">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+                <a href="{% url 'my_profile' %}" class="btn btn-outline-danger">
+                    <i class="fas fa-arrow-left"></i> Profile
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
-
 {% endblock %}
-

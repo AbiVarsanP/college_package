@@ -1,168 +1,427 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load static %}
+
+{% block title %}My Profile{% endblock %}
+
 {% block hero %}
 {% endblock %}
-{% block title %} My Profile {% endblock %} 
-{% block style%}
 
+{% block style %}
 <style>
-    .item-center,.avatar {
-        background: rgba(255, 255, 255, 0.9);
-        padding: 40px;
-        border-radius: 16px;
-        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
-        width: 100%;
-        backdrop-filter: blur(8px);
+    :root {
+        --primary: #ffa101;
+        --secondary: #2c2c2c;
+        --background: #f5f7fa;
+        --card-bg: #ffffff;
+        --text: #1a1a1a;
+        --text-muted: #6b7280;
+        --dark: #1f2a44;
+        --light-gray: #f5f7fa;
+        --white: #ffffff;
+        --accent: #ffedd5;
+        --success: #28a745;
+        --danger: #dc3545;
+        --border-radius: 12px;
+        --shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
-    
-    .avatar{
-        width: 60%;
-        
+
+    body {
+        background-color: #ffa10180;
     }
-    td{
-        text-align: start;
+
+    .profile-section {
+        background: #ffffff80;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        margin-bottom: 2rem;
+        border-left: 5px solid var(--primary);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .profile{
+
+    .profile-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .profile-section h3 {
+        color: var(--primary);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        font-size: 1.75rem;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: center;
-    }
-    .btn-group{
-        width: 100%;
+        gap: 0.5rem;
     }
 
-    
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
 
+    .profile-avatar-container {
+        position: relative;
+        text-align: center;
+    }
+
+    .profile-avatar {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        border: 4px solid var(--primary);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-avatar:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 161, 1, 0.3);
+    }
+
+    .profile-status {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--success);
+        border: 3px solid var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 1.25rem;
+    }
+
+    .profile-info h4 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-info p {
+        font-size: 1rem;
+        color: var(--text-muted);
+        margin: 0.25rem 0;
+    }
+
+    .profile-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        padding: 1.5rem;
+        background: #f9fafb;
+        border-radius: 10px;
+    }
+
+    .profile-details p {
+        margin: 0.5rem 0;
+        font-size: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .profile-details strong {
+        color: var(--text);
+        font-weight: 600;
+        width: 40%;
+        text-align: left;
+    }
+
+    .profile-details span {
+        color: var(--text);
+        width: 60%;
+        text-align: left;
+        font-weight: 400;
+        padding-left: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .profile-details {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-details p {
+            flex-direction: column;
+            gap: 0.25rem;
+            align-items: flex-start;
+        }
+
+        .profile-details strong,
+        .profile-details span {
+            width: 100%;
+            text-align: left;
+            padding-left: 0;
+        }
+    }
+
+    .usage-section {
+        background: #ffffff80;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        margin-bottom: 2rem;
+        border-left: 5px solid var(--primary);
+    }
+
+    .usage-section h3 {
+        color: var(--primary);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .usage-table {
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .usage-table th,
+    .usage-table td {
+        padding: 1rem 1.25rem;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    .usage-table th {
+        background: var(--accent);
+        color: var(--text);
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        border-bottom: 2px solid #e5e7eb;
+    }
+
+    .usage-table td {
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 0.95rem;
+    }
+
+    .usage-table tbody tr:hover {
+        background-color: #fff7e6;
+    }
+
+    .usage-table a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .usage-table a:hover {
+        color: #d88901;
+        text-decoration: underline;
+    }
+
+    .usage-table .total-row {
+        background: var(--accent);
+        font-weight: 600;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+    }
+
+    .btn {
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 0.75rem 1.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: var(--white);
+    }
+
+    .btn-primary:hover {
+        background: #e69101;
+        border-color: #e69101;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-danger {
+        background: var(--danger);
+        border-color: var(--danger);
+        color: var(--white);
+    }
+
+    .btn-danger:hover {
+        background: #c82333;
+        border-color: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .profile-section,
+        .usage-section {
+            padding: 1.5rem;
+        }
+
+        .profile-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+        }
+
+        .profile-status {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+        }
+
+        .usage-table th,
+        .usage-table td {
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+    }
 </style>
-
-{% endblock %} 
-
-
-{% block main %}
-
-<div class="container item-center">
-
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2">
-        <div class="col profile">
-            <img src="/media/Users/profiles/logo.png" class="rounded-circle avatar"  alt="">
-            <br>
-        </div>
-        <div class="col">
-            <table class="table table-striped table-hover">
-                <tbody>
-                    <tr>
-                        <td>Username</td>
-                        <td>{{user.username}}</td>
-                    </tr>
-                    <tr>
-                        <td>Name</td>
-                        <td>{{profile.name}}</td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td>{{user.email}}</td>
-                    </tr>
-                    <tr>
-                        {% if user.is_staff %}
-                        <td>Roll Number</td>
-                        <td>{{profile.roll}}</td>
-                        {% else %}
-                        
-                        <td>Staff ID</td>
-                        <td>{{profile.roll}}</td>
-                        {% endif %}
-                    </tr>
-
-                    <tr>
-                        <td>Degree</td>
-                        <td>{{profile.degree}}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Branch</td>
-                        <td>{{profile.branch}}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Mobile Number</td>
-                        <td>{{profile.phone}}</td>
-                    </tr>
-
-                    <tr>
-                        <td>College</td>
-                        <td>{{profile.college.name}}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Gender</td>
-                        <td>{{profile.gender}}</td>
-                    </tr>
-
-                    
-                    <tr>
-                        <td>Last login</td>
-                        <td>{{user.last_login}}</td>
-                    </tr>
-                    <tr>
-                        <td>Profile Status</td>
-                        <td>{{profile.is_completed}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <br>
-    <table class="table table-hover">
-        <thead class="table-info">
-            <tr>
-                <td>APP NAME</td>
-                <td>COUNTS</td>
-                <td> HISTORY </td>
-            </tr>
-        </thead>
-        <tbody>
-            {% if not user.is_staff %}
-            <tr>
-                <td>Path Pilot</td>
-                <td>{{profile.CT_usage.count}}</td>
-                <td><a href="{% url 'cg' %}" class="view">View all</a></td>
-            </tr>
-            {% else %}
-            <tr>
-                <td>Profes Pro</td>
-                <td>{{profile.CP_usage.count}}</td>
-                <td><a href="{% url 'cp_history' %}" class="view">View all</a></td>
-            </tr>
-            
-            {% endif %}
-            <tr>
-                <td>SMCG</td>
-                <td>{{profile.SMCG_usage.count}}</td>
-                <td><a href="{% url 'smcg_history' %}" class="view">View all</a></td>
-            </tr>
-
-            <tr>
-                <td>ATS</td>
-                <td>{{profile.ATS_usage.count}}</td>
-                <td><a href="{% url 'smcg_history' %}" class="view">View all</a></td>
-            </tr>
-            
-            <tr>
-                <td><b>TOTAL</b></td>
-                <td>USAGE : {{profile.calculate_credit}}</td>
-                <td>BALANCE : {{profile.balance_credit}}</td>
-            </tr>
-
-        </tbody>
-    </table>
-    
-    <div class="btn-group" role="group" aria-label="Basic outlined example">
-        <a type="button" href="{% url 'edit_profile' %}" class="btn btn-outline-warning"><i class="far fa-edit text-warning" ></i> Edit Profile</a>
-        <a type="button" href="{% url 'password_change' %}" class="btn btn-outline-info"><i class="fas fa-key text-info"></i> Change Password</a>
-        <a type="button" href="{% url 'logout_get' %}" type="submit" class="btn btn-outline-danger"><i class="fas fa-skiing-nordic text-danger"></i>Logout</a>
-      </div>
-</div>
-
 {% endblock %}
 
+{% block main %}
+<div class="container">
+    <section class="profile-section">
+        <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+        <div class="profile-header">
+            <div class="profile-avatar-container">
+                <img src="{{ profile.profile.url }}" class="profile-avatar" alt="Profile Avatar">
+                <div class="profile-status" title="Profile Active">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+            <div class="profile-info">
+                <h4>{{ profile.name }}</h4>
+                <p>{{ user.email }}</p>
+                <p>{% if user.is_staff %}Staff ID{% else %}Roll Number{% endif %}: {{ profile.roll }}</p>
+                <p>Last Login: {{ user.last_login }}</p>
+            </div>
+        </div>
+        <div class="profile-details">
+            <p><strong>Username:</strong> <span>{{ user.username }}</span></p>
+            <p><strong>Name:</strong> <span>{{ profile.name }}</span></p>
+            <p><strong>Email:</strong> <span>{{ user.email }}</span></p>
+            <p><strong>{% if user.is_staff %}Staff ID{% else %}Roll Number{% endif %}:</strong> <span>{{ profile.roll }}</span></p>
+            <p><strong>Degree:</strong> <span>{{ profile.degree }}</span></p>
+            <p><strong>Branch:</strong> <span>{{ profile.branch }}</span></p>
+            <p><strong>Mobile Number:</strong> <span>{{ profile.phone }}</span></p>
+            <p><strong>College:</strong> <span>{{ profile.college.name }}</span></p>
+            <p><strong>Gender:</strong> <span>{{ profile.gender }}</span></p>
+            <p><strong>Last Login:</strong> <span>{{ user.last_login }}</span></p>
+            <p><strong>Profile Status:</strong> <span>{{ profile.is_completed }}</span></p>
+        </div>
+    </section>
+
+    <section class="usage-section">
+        <h3><i class="fas fa-chart-bar"></i> Usage Statistics</h3>
+        <table class="table table-hover usage-table">
+            <thead>
+                <tr>
+                    <th scope="col">APP NAME</th>
+                    <th scope="col">COUNTS</th>
+                    <th scope="col">HISTORY</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if not user.is_staff %}
+                <tr>
+                    <td>Path Pilot</td>
+                    <td>{{ profile.CT_usage.count }}</td>
+                    <td><a href="{% url 'cg' %}">View all</a></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td>Profes Pro</td>
+                    <td>{{ profile.CP_usage.count }}</td>
+                    <td><a href="{% url 'cp_history' %}">View all</a></td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td>SMCG</td>
+                    <td>{{ profile.SMCG_usage.count }}</td>
+                    <td><a href="{% url 'smcg_history' %}">View all</a></td>
+                </tr>
+                <tr>
+                    <td>ATS</td>
+                    <td>{{ profile.ATS_usage.count }}</td>
+                    <td><a href="{% url 'smcg_history' %}">View all</a></td>
+                </tr>
+                <tr class="total-row">
+                    <td>TOTAL USAGE</td>
+                    <td>{{ profile.calculate_credit }}</td>
+                    <td><strong>BALANCE: {{ profile.balance_credit }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div class="action-buttons">
+        <a href="{% url 'edit_profile' %}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Profile</a>
+        <a href="{% url 'password_change' %}" class="btn btn-primary"><i class="fas fa-key"></i> Change Password</a>
+        <a href="{% url 'logout_get' %}" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".usage-table").DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            responsive: true,
+            autoWidth: true,
+            pageLength: 10,
+            dom: 'Bfrtip',
+            buttons: ['copy', 'excel', 'pdf', 'print'],
+            lengthMenu: [5, 10, 15, 25, 50]
+        });
+    });
+</script>
+{% endblock %}

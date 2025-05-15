@@ -181,7 +181,7 @@
             padding: 0.9rem 1rem;
             text-align: left;
             vertical-align: middle;
-            min-width: 100px; /* Minimum width for readability */
+            min-width: 100%; /* Minimum width for readability */
         }
 
         .table th {
@@ -412,7 +412,7 @@
             .table td {
                 font-size: 0.75rem;
                 padding: 0.5rem 0.75rem;
-                min-width: 80px; /* Smaller minimum width for mobile */
+                min-width: 80%; /* Smaller minimum width for mobile */
             }
 
             /* Allow text wrapping for better fit */
@@ -440,6 +440,7 @@
             .services-dropdown {
                 display: none;
             }
+            
         }
     </style>
     {% block style %}{% endblock %}
@@ -449,7 +450,7 @@
         <div class="container">
             <a class="navbar-brand" href="{% url 'index' %}">
                 <img src="/media/Users/profiles/logo.png" alt="CloudPlusAI Logo">
-                CloudPlusAI
+                CloudplusAI
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -470,38 +471,36 @@
                         </ul>
                     </li>
                     {% endif %}
+                    {% if user.is_staff and profile.is_admin %}
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'college_form' %}"><i class="fas fa-plus-circle me-2"></i>Create a new EdBud</a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_staff or user.is_superuser %}
                     <li class="nav-item services-menu">
                         <a class="nav-link" href="{% url 'cp' %}"><i class="fas fa-chalkboard-teacher me-2"></i>Profes Pro</a>
                     </li>
                     <li class="nav-item services-menu">
                         <a class="nav-link" href="{% url 'feed360' %}"><i class="fas fa-sync-alt me-2"></i>Feed 360°</a>
                     </li>
+                    {% else %}
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'cg' %}"><i class="fas fa-route me-2"></i>Path Pilot</a>
+                    </li>
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'linkedin' %}"><i class="fab fa-linkedin me-2"></i>LinkedIn</a>
+                    </li>
+                    <li class="nav-item services-menu">
+                        <a class="nav-link" href="{% url 'rb' %}"><i class="fas fa-file-alt me-2"></i>Resume Builder</a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item services-menu">
                         <a class="nav-link" href="{% url 'ats' %}"><i class="fas fa-tasks me-2"></i>ATS</a>
                     </li>
-                    <li class="nav-item dropdown services-dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Services
-                        </a>
-                        <ul class="dropdown-menu">
-                            {% if user.is_staff and profile.is_admin %}
-                            <li><a class="dropdown-item" href="{% url 'college_form' %}"><i class="fas fa-plus-circle me-2"></i>Create a new EdBud</a></li>
-                            {% endif %}
-                            {% if user.is_staff or user.is_superuser %}
-                            <li><a class="dropdown-item" href="{% url 'cp' %}"><i class="fas fa-chalkboard-teacher me-2"></i>Profes Pro</a></li>
-                            <li><a class="dropdown-item" href="{% url 'feed360' %}"><i class="fas fa-sync-alt me-2"></i>Feed 360°</a></li>
-                            {% else %}
-                            <li><a class="dropdown-item" href="{% url 'cg' %}"><i class="fas fa-route me-2"></i>Path Pilot</a></li>
-                            <li><a class="dropdown-item" href="{% url 'linkedin' %}"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
-                            <li><a class="dropdown-item" href="{% url 'rb' %}"><i class="fas fa-file-alt me-2"></i>Resume Builder</a></li>
-                            {% endif %}
-                            <li><a class="dropdown-item" href="{% url 'ats' %}"><i class="fas fa-tasks me-2"></i>Application Tracking System</a></li>
-                            <li><a class="dropdown-item" href="{% url 'generate_social_media_content' %}"><i class="fas fa-edit me-2"></i>Social Media Content Generator</a></li>
-                        </ul>
-                    </li>
+                    
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/media/Users/profiles/logo.png" class="profile-img" alt="Profile">
+                            <img src="{{ profile.profile.url }}" class="profile-img" alt="Profile">
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'my_profile' %}"><i class="fas fa-user-graduate me-2"></i>My Profile</a></li>
@@ -522,7 +521,7 @@
     {% block hero %}
     <section class="hero">
         <div class="container">
-            <h1>Empower Your Future with CloudPlusAI</h1>
+            <h1>Empower Your Future with CloudplusAI</h1>
             <p>Discover cutting-edge tools for education, recruitment, and social media content creation.</p>
         </div>
     </section>
@@ -555,7 +554,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>© CloudPlusAI {% if version %}v{{version}}{% else %}v1{% endif %}. All Rights Reserved.</p>
+            <p>© CloudplusAI {% if version %}v{{version}}{% else %}v1{% endif %}. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -638,7 +637,7 @@
                     ordering: true,
                     info: true,
                     responsive: true,
-                    autoWidth: false,
+                    autoWidth: true,
                     lengthMenu: [5, 10, 15],
                     language: {
                         processing: "Processing...",

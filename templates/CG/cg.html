@@ -1,106 +1,153 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load static %}
-{% block title %} Path Pilot {% endblock %} 
+{% block title %} Path Pilot {% endblock %}
 {% block hero %}
 {% endblock %}
-
-
 {% block main %}
 <style>
-    .item-center {
-        border: 0.5px dashed var(--c2);
-        border-radius: 5px;
-        padding: 1em;
-        background-color: white;
+    :root {
+        --primary: #ffa101;
+        --light: #fdfaf5;
+        --dark: #343a40;
+        --white: #ffffff;
     }
-    .output-container {
-        background-color: whitesmoke;
+
+    body {
+        background-color: #ffa10150;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--dark);
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
     }
-    .roadmap-container {
-        border: 1px dotted rgba(128, 128, 128, 0.351);
-        padding: 5px;
+
+    .breadcrumb {
+        background-color: var(--white);
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
-    h6 a {
-        color: var(--c3);
+
+    .breadcrumb-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
     }
-    h3 {
-        color: var(--c2);
-        border-bottom: 1px dotted var(--c2);
-        font-family: var(--fnt);
-        letter-spacing: 1px;
-        text-align: center;
-    }
-    .year-container p strong {
-        color: green;
+
+    .breadcrumb-item a:hover {
+        color: #d88901;
         text-decoration: underline;
+    }
+
+    .btn-outline-warning {
+        border-width: 2px;
+        color: white;
+        background-color: #ffa101;
+    }
+
+    .btn-outline-warning:hover {
+        color: #ffffff;
+    }
+
+    .accordion-button {
+        background-color: #fff8ec;
+        color: #000;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: var(--primary);
+        color: #fff;
+    }
+
+    .container1 {
+        background-color: #ffffff80;
+        padding: 20px;
+    }
+
+    .accordion-body {
+        background-color: #fff;
+        border-top: 1px solid #ffc107;
+    }
+
+    .list-group-item {
+        background-color: #fff;
+        border: none;
+        border-left: 4px solid var(--primary);
+        margin-bottom: 5px;
+    }
+
+    h3 {
+        font-size: 1.75rem;
+        color: var(--primary);
+        text-align: center;
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 10px;
+    }
+
+    h4 {
+        margin-top: 1rem;
+        font-size: 1.2rem;
     }
 </style>
 
-<div class="container">
-    
-    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+<div class="container my-4">
+    <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
-    
-          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href="{% url 'cg' %}"> <img src="{% static 'defaults/icon/cg.png' %}" width="30" style="transform: scale(1.1);"  alt=""> Path Pilot</a></li>
-          
+            <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item active"><a href="{% url 'cg' %}">Path Pilot</a></li>
         </ol>
-      </nav>
-</div>
+    </nav>
 
-<div class="container item-center">
-    <div class="row" style="padding: 10px">
-        <a href="{% url 'linked_in' %}" class="btn sub-btn"> Career Maping <i class="fas fa-street-view"></i> </a>
-        <br>
-    </div>
-    <br><br><br>
-    {% if ct %}
-    <div class="row">
+    <div class="container1">
+        <div class="text-center mb-4">
+            <a href="{% url 'linked_in' %}" class="btn btn-lg btn-outline-warning fw-semibold">
+                Career Mapping <i class="fas fa-street-view"></i>
+            </a>
+        </div>
+
         <h3>History <i class="fas fa-history"></i></h3>
-        <div class="accordion w-100 accordion-flush" id="accordionExample">
-            {% for i in ct %}            
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{i.id}}" aria-expanded="false" aria-controls="collapseOne{{i.id}}">
-                  PP-{{i.id}} &ensp; <strong>@{{i.goal}}</strong>&ensp; on {{i.created}}
-                </button>
-              </h2>
-              <div id="collapseOne{{i.id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    
-                    <div id="output{{i.id}}">
-                        {% autoescape off %}
-                            {{ i.output }}
-                        {% endautoescape %}
-                        <div id="credit"></div>
-                        <br>
-                    </div>
-                    <button class="btn btn-outline-success" onclick="printDiv(`output{{i.id}}`)" >Save to PDF</button>
 
+        {% if ct %}
+        <div class="accordion accordion-flush" id="accordionExample">
+            {% for i in ct %}
+            <div class="accordion-item border rounded mb-3">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed fw-medium" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{ i.id }}" aria-expanded="false" aria-controls="collapseOne{{ i.id }}">
+                        PP-{{ i.id }}   <strong>@{{ i.goal }}</strong>  on {{ i.created }}
+                    </button>
+                </h2>
+                <div id="collapseOne{{ i.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div id="output{{ i.id }}">
+                            {% autoescape off %}
+                                {{ i.output }}
+                            {% endautoescape %}
+                            <div id="credit"></div>
+                        </div>
+                        <div class="text-end mt-3">
+                            <button class="btn btn-outline-success" onclick="printDiv('output{{ i.id }}')">Save to PDF</button>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
             {% endfor %}
-          </div>
+        </div>
+        {% else %}
+        <h3 class="text-center text-danger">No Record Found. Click the above button for Map Generation.</h3>
+        {% endif %}
     </div>
-    {% else %}
-    <h3>No Record Found. Click The above button for Map Feneration.</h3>
-    {% endif %}
-
 </div>
 
 <script>
     function printDiv(divId) {
-        console.log(divId);
-        document.getElementById("credit").innerHTML = "&copy; Generated by <a href='{% url 'cg' %}' >Neuraa  [Path Pilot]</a> at "
+        document.getElementById("credit").innerHTML = "&copy; Generated by <a href='{% url 'cg' %}'>CloudplusAI [Path Pilot]</a> at ";
         var printContents = document.getElementById(divId).innerHTML;
         var originalContents = document.body.innerHTML;
-
         document.body.innerHTML = printContents;
         window.print();
         location.reload();
-     }
+    }
 </script>
-
-
 {% endblock %}

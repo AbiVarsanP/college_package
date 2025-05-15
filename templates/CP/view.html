@@ -2,7 +2,6 @@
 {% block hero %}
 {% endblock %}
 {% block nav %}
-
 <a
     href=""
     id="nav"
@@ -11,25 +10,109 @@
 >
     Profes Pro plan for <small>CP{{record.id}}</small>
 </a>
-
-{% endblock %} {% block main %}
-
-
+{% endblock %}
+{% block main %}
 <style>
+    :root {
+        --primary: #ffa101;
+        --dark: #1f2a44;
+        --light-gray: #f5f7fa;
+        --white: #ffffff;
+        --text: #333333;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        color: var(--text);
+        background-color: #ffa10150;
+        margin: 0;
+        line-height: 1.6;
+    }
+
     h2 {
-        color: var(--c2);
+        color: var(--primary);
         margin-bottom: 20px;
     }
+
+    h3 {
+        color: var(--primary);
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
     strong {
         font-size: 18px;
-        text-decoration: underline;
-        font-weight: 500;
+        font-weight: bold;
         letter-spacing: 1px;
-        color: green;
+        color: var(--primary);
     }
+
     p {
         font-size: 18px;
     }
+
+    .main-content {
+        padding: 2rem;
+    }
+
+    .plan {
+        background-color: #ffffff80;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .list-group-item {
+        background-color: var(--white);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .breadcrumb {
+        background-color: var(--white);
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .breadcrumb-item a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #d88901;
+        text-decoration: underline;
+    }
+
+    .btn-primary {
+        background-color: var(--white);
+        border: none;
+        padding: 0.75rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        border-radius: 8px;
+        color: var(--primary);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: rgb(230, 230, 230);
+        transform: translateY(-2px);
+        color: var(--primary);
+    }
+
+    .btn-container {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
     @media print {
         body * {
             visibility: hidden;
@@ -42,7 +125,7 @@
         #output {
             position: absolute;
             left: 0;
-            top: 10;
+            top: 10px;
         }
         .credit {
             position: absolute;
@@ -50,31 +133,29 @@
             right: 5px;
         }
     }
+
+    @media (max-width: 768px) {
+        .main-content {
+            padding: 1.5rem;
+        }
+    }
 </style>
 
-<div class="container">
-    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-
+<div class="main-content">
+    <nav style="--bs-breadcrumb-divider: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&quot;);" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
-      
-            <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'cp' %}">Profes Pro</a></li>
-            <li class="breadcrumb-item active"><a style="color:var(--c2); text-decoration: none;" href="{% url 'cp_history' %}">Records</a></li>
-            <li class="breadcrumb-item active" aria-current="page">
-                CP{{record.id}}
-            </li>
+            <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{% url 'cp' %}">Profes Pro</a></li>
+            <li class="breadcrumb-item active"><a href="{% url 'cp_history' %}">Records</a></li>
+            <li class="breadcrumb-item active" aria-current="page">CP{{record.id}}</li>
         </ol>
     </nav>
-</div>
-<br />
-<div id="output" class="container item-center">
-    
-</div>
 
-<div class="container">
-    <button class="btn sub-btn" onclick="printDiv('output')">
-        Save to PDF
-    </button>
+    <div id="output" class="container"></div>
+
+    <div class="container btn-container">
+        <button class="btn btn-primary" onclick="printDiv('output')">Save to PDF</button>
+    </div>
 </div>
 
 <script>
@@ -83,44 +164,38 @@
         for (const week in courseplan) {
             if (courseplan.hasOwnProperty(week)) {
                 const details = courseplan[week];
-    
                 html += `<h3>${week}</h3>`;
-                html += `<ul>`;
-                html += `<li><strong>Topic</strong>: ${details.Topic}</li>`;
-                html += `<li><strong>Periods</strong>: ${details.Periods}</li>`;
-                html += `<li><strong>Hints</strong>: ${details.Hints}</li>`;
-                html += `<li><strong>Learning Resources</strong>:`;
+                html += `<ul class="list-group list-group-flush">`;
+                html += `<li class="list-group-item"><strong>Topic</strong>: ${details.Topic}</li>`;
+                html += `<li class="list-group-item"><strong>Periods</strong>: ${details.Periods}</li>`;
+                html += `<li class="list-group-item"><strong>Hints</strong>: ${details.Hints}</li>`;
+                html += `<li class="list-group-item"><strong>Learning Resources</strong>:`;
                 html += `<ul>`;
                 for (const resource in details["Learning Resources"]) {
-                    if (
-                        details["Learning Resources"].hasOwnProperty(resource)
-                    ) {
+                    if (details["Learning Resources"].hasOwnProperty(resource)) {
                         html += `<li><a target="_blank" href="${details["Learning Resources"][resource]}">${resource}</a></li>`;
                     }
                 }
+                html += `</ul></li>`;
                 html += `</ul>`;
-                html += `</li>`;
-                html += `</ul>`;
-                html += `</div>`;
             }
         }
-        html += `<div id="credit">  </div>`;
-
+        html += `<div id="credit"></div>`;
         return html;
     }
 
-    // Output container
     function load_DOM(data) {
         const outputContainer = document.getElementById("output");
         outputContainer.innerHTML = generateCoursePlanHTML(data.courseplan);
     }
+
     window.onload = () => {
         load_DOM(JSON.parse('{{record.output|escapejs}}'));
     };
 
     function printDiv(divId) {
         document.getElementById("credit").innerHTML =
-            "&copy; Generated by <a href='{% url 'cg' %}' >Neuraa  [Path Pilot]</a> at {{record.created}}";
+            "© Generated by <a href='{% url 'cg' %}' >Neuraa [Path Pilot]</a> at {{record.created}}";
         var printContents = document.getElementById(divId).innerHTML;
         var originalContents = document.body.innerHTML;
 

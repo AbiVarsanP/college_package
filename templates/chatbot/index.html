@@ -121,7 +121,7 @@
             <div class="usage">
                 <div class="usage-logo">
                 </div>
-                <a href="{% url 'cg' %}" ><i class="fas fa-link"></i>Path pilot Usage : {{profile.CT_usage.count}}%</a>
+                <a href="{% url 'cg' %}" ><i class="fas fa-route me-2"></i>Path pilot : {{profile.CT_usage.count}}%</a>
                 <hr>
                 <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-bar" style="width: {{profile.CT_usage.count}}%;" ></div>
@@ -133,7 +133,19 @@
             <div class="usage">
                 <div class="usage-logo">
                 </div>
-                <a href="{% url 'ats_history' %}"><i class="fas fa-link"></i>ATS : {{profile.ATS_usage.count}}%</a>
+                <a href="{% url 'linkedin' %}"><i class="fab fa-linkedin me-2"></i>LinkedIn : {{profile.linkiedin_usage.count}}%</a>
+                <hr>
+                <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: {{profile.linkedin_usage.count}}%;" ></div>
+                  </div>
+            </div>
+        </div>
+
+        <div class="col m-1 p-1 ">
+            <div class="usage">
+                <div class="usage-logo">
+                </div>
+                <a href="{% url 'ats_history' %}"><i class="fas fa-tasks"></i>  ATS : {{profile.ATS_usage.count}}%</a>
                 <hr>
                 <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-bar" style="width: {{profile.ATS_usage.count}}%;" ></div>

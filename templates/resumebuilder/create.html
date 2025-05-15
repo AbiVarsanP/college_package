@@ -1,233 +1,425 @@
 {% extends "base.html" %}
 {% load static %}
-{% block hero %}
-{% endblock %}
-{% block title %} Resume Builder {% endblock %}
- 
+
+{% block title %}Resume Builder{% endblock %}
+
 {% block style %}
 <style>
-    .item-center {
-        border: 0.5px dashed var(--c2);
-        border-radius: 5px;
-        padding: 1em;
-        background-color: white;
+    :root {
+        --primary: #ffa101;
+        --secondary: #2e2e2e;
+        --background: #ffa10150;
+        --card-bg: #ffffff;
+        --text: #333333;
+        --accent: #e63946;
+        --border-radius: 10px;
     }
-    .output-container {
-        background-color: whitesmoke;
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--background);
+        color: var(--text);
+        margin: 0;
+        line-height: 1.6;
+        overflow-x: hidden;
     }
-    .roadmap-container {
-        border: 1px dotted rgba(128, 128, 128, 0.351);
-        padding: 5px;
+
+    .main-content {
+        padding: 2rem;
+        min-height: 100vh;
     }
-    h6 a {
-        color: var(--c3);
+
+    .section-card {
+        background-color: #ffffff80;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: transform 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-    h3 {
-        color: var(--c2);
-        border-bottom: 1px dotted var(--c2);
-        font-family: var(--fnt);
-        letter-spacing: 1px;
-        text-align: center;
+
+    .section-card:hover {
+        transform: translateY(-5px);
     }
-    .year-container p strong {
-        color: green;
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 1rem;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .section-header h4 {
+        margin: 0;
+        font-weight: 500;
+        color: var(--primary);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .form-group label {
+        font-weight: 400;
+        color: black;
+        margin-bottom: 0.5rem;
+        display: block;
+        transition: all 0.3s ease;
+    }
+
+    .form-control, .form-select {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        color: var(--text);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        background-color: #ffffff;
+        box-shadow: 0 0 8px rgba(255, 161, 1, 0.3);
+        outline: none;
+    }
+     .breadcrumb {
+        background-color: #ffffff; /* Match the yellowish background from screenshot */
+        padding: 0.75rem 1rem;
+        border-radius: 10px; /* Slightly larger radius for rounded corners */
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .breadcrumb-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .breadcrumb-item a {
+        color: #ffa101; /* Match the primary color */
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #d88901; /* Darker shade for hover, consistent with theme */
         text-decoration: underline;
     }
-    li a {
-        color: var(--c3);
+
+    .breadcrumb-item.active a {
+        color: #ffa101; /* Active item color */
+        font-weight: bold;
+        pointer-events: none; /* Disable interaction for active item */
     }
-    
-    .blink-animation {
-        transition: all 1s step-end;
+
+    /* Ensure the divider matches the style */
+    .breadcrumb-item + .breadcrumb-item::before {
+        color: #ffa101; /* Match divider color to theme */
     }
-    #skill-list {
-        text-align: center;
-        justify-items: center;
+
+    .btn-primary {
+        background-color: var(--primary);
+        border: 1px solid var(--primary);
+        padding: 0.75rem 2rem;
+        font-weight: 500;
+        border-radius: 8px;
+        color: white;
+        transition: all 0.3s ease;
     }
-    #skill-list .badge{
-        display: flex;
-        justify-content: center;
+
+    .btn-primary:hover, .btn-primary:focus {
+        background-color: #e69101;
+        border-color: var(--primary);
+        transform: scale(1.05);
+    }
+
+    .btn-success {
+        background-color: #ffa101;
+        border: 1px solid var(--primary);
+        color: #ffffff;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #e49712;
+        border-color: var(--primary);
+        transform: scale(1.05);
+    }
+
+    .btn-info {
+        background-color: #ffffff70;
+        border: 1px solid var(--primary);
+        color: #ffa101;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-info:hover {
+        background-color: #e49712;
+        border-color: var(--primary);
+        transform: scale(1.05);
+        color: white;
+    }
+
+    .btn-outline-danger {
+        border: 1px solid var(--primary);
+        color: var(--accent);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: var(--accent);
+        border-color: var(--primary);
+        color: #ffffff;
+    }
+
+    #skill-list .badge {
+        display: inline-flex;
         align-items: center;
-        
+        margin: 0.5rem;
+        background-color: #e0e0e0;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
     }
-    form{
-        background-color: whitesmoke;
-    }
-    #skill-list .badge p{
-        font-size: 15px;
-        letter-spacing: .5px;
-        border: 1px solid var(--c2);
-        
-        color: var(--c2);
-        text-align: center;
-        padding: 10px;
+
+    #skill-list .badge p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--text);
         cursor: pointer;
-        width: min-content;
-        border-radius: 6px;
-
-    }
-    #skill-list .badge p:hover{
-        background-color: whitesmoke;
     }
 
+    #skill-list .badge:hover {
+        background-color: #d1d1d1;
+    }
+
+    
+
+    .toast {
+        background-color: var(--card-bg);
+        border: 1px solid var(--primary);
+        border-radius: var(--border-radius);
+    }
+
+    .toast-header {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+
+    @media (max-width: 768px) {
+        .btn-group {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
 </style>
-{% endblock %} 
-
+{% endblock %}
 
 {% block main %}
+<div class="main-content" id="mainContent">
+    <div class="container">
+        <nav style="--bs-breadcrumb-divider: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&quot;);" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item a"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a></li>
+                <li class="breadcrumb-item a"><a href="{% url 'rb' %}"><i class="fab fa-affiliatetheme"></i> Resume Builder</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@{{rb.role}}</li>
+            </ol>
+        </nav>
 
-<div class="container">
-    
-    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
-    
-          <li class="breadcrumb-item"><a style="color:var(--c3); text-decoration: none;"href="{% url 'rb' %}"> <i class="fab fa-affiliatetheme"></i> &nbsp;Resume Builder</a></li>
-          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href=""> @{{rb.role}}</a></li>
-          
-        </ol>
-      </nav>
+        <div class="section-card">
+            <div class="section-header" data-bs-toggle="collapse" data-bs-target="#personalInfo">
+                <h4>Personal Information</h4>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="collapse show" id="personalInfo">
+                <div class="row">
+                    {% include 'resumebuilder/partial/edit.html' %}
+                    <div class="d-flex justify-content-end gap-3 mt-3">
+                        <button type="reset" class="btn btn-outline-danger">Clear</button>
+                        <button id="submitButton" type="button" class="btn btn-primary">Save <i class="fas fa-save ms-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header" data-bs-toggle="collapse" data-bs-target="#skillsSection">
+                <h4>Skills <small style="color: grey; font-size: 10px;">click to remove</small></h4>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="collapse show" id="skillsSection">
+                <div id="skill-list" class="row mb-3">
+                    {% include 'resumebuilder/partial/skills.html' %}
+                </div>
+                <div id="skill_form_wrap">
+                    {% include 'resumebuilder/partial/skill_form.html' %}
+                </div>
+                <div class="btn-group w-100 mt-3">
+                    <button id="addskill" hx-get="{% url 'create_skill' rb.id %}" hx-target="#skill_form_wrap" hx-swap="beforeend" class="btn btn-info"><i class="fas fa-plus"></i> Add Skill</button>
+                    <button id="save_skills" class="btn btn-success">Save <i class="fas fa-save"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header" data-bs-toggle="collapse" data-bs-target="#educationSection">
+                <h4>Education <small style="color: grey; font-size: 10px;">click to remove</small></h4>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="collapse show" id="educationSection">
+                <div id="edu-list" class="row mb-3">
+                    {% include 'resumebuilder/partial/edu.html' %}
+                </div>
+                <div id="edu_form_wrap">
+                    {% include 'resumebuilder/partial/edu_form.html' %}
+                </div>
+                <div class="btn-group w-100 mt-3">
+                    <button type="submit" class="btn btn-success">Add <i class="fas fa-save"></i></button>
+                    <button type="reset" class="btn btn-outline-danger">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header" data-bs-toggle="collapse" data-bs-target="#achievementsSection">
+                <h4>Achievements</h4>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="collapse show" id="achievementsSection">
+                <div id="ach-list" class="row mb-3">
+                    {% include 'resumebuilder/partial/ach.html' %}
+                </div>
+                <div id="exp_form_wrap">
+                    {% include 'resumebuilder/partial/ach_form.html' %}
+                </div>
+                <div class="btn-group w-100 mt-3">
+                    <button type="submit" class="btn btn-success">Add <i class="fas fa-save"></i></button>
+                    <button type="reset" class="btn btn-outline-danger">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header" data-bs-toggle="collapse" data-bs-target="#projectsSection">
+                <h4>Projects</h4>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="collapse show" id="projectsSection">
+                <div id="pro-list" class="row mb-3">
+                    {% include 'resumebuilder/partial/pro.html' %}
+                </div>
+                <div id="pro_form_wrap">
+                    {% include 'resumebuilder/partial/pro_form.html' %}
+                </div>
+                <div class="btn-group w-100 mt-3">
+                    <button type="submit" class="btn btn-success">Add <i class="fas fa-save"></i></button>
+                    <button type="reset" class="btn btn-outline-danger">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header" data-bs-toggle="collapse" data-bs-target="#socialSection">
+                <h4>Social Links</h4>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="collapse show" id="socialSection">
+                <div id="soc-list" class="row mb-3">
+                    {% include 'resumebuilder/partial/soc.html' %}
+                </div>
+                <div id="soc_form_wrap">
+                    {% include 'resumebuilder/partial/soc_form.html' %}
+                </div>
+                <div class="btn-group w-100 mt-3">
+                    <button type="submit" class="btn btn-success">Add <i class="fas fa-save"></i></button>
+                    <button type="reset" class="btn btn-outline-danger">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header" data-bs-toggle="collapse" data-bs-target="#languagesSection">
+                <h4>Languages</h4>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="collapse show" id="languagesSection">
+                <div id="lang-list" class="row mb-3">
+                    {% include 'resumebuilder/partial/lang.html' %}
+                </div>
+                <div id="lang_form_wrap">
+                    {% include 'resumebuilder/partial/lang_form.html' %}
+                </div>
+                <div class="btn-group w-100 mt-3">
+                    <button type="submit" class="btn btn-success">Add <i class="fas fa-save"></i></button>
+                    <button type="reset" class="btn btn-outline-danger">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <a href="{% url 'resume_templates' rb.uid %}" class="btn btn-primary w-100">Preview Resume <i class="fas fa-eye ms-2"></i></a>
+        </div>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="https://www.mjvinnovation.com/wp-content/uploads/2021/07/mjv_blogpost_redes_neurais_ilustracao_cerebro-01-1024x1020.png" style="width: 15px;" class="rounded me-2" alt="Neuraa">
+                <strong class="me-auto">Notification</strong>
+                <small>Now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast_message"></div>
+        </div>
+    </div>
 </div>
+{% endblock %}
 
-<div class="container item-center">
-
-    <div class="row">
-        {% include 'resumebuilder/partial/edit.html' %}
-        <button id="submitButton"  class="btn w-100 btn-success">Save</button>
-    </div>
-
-    <br>
-    <hr>
-    <div class="row">
-        <h4 style="text-align: center; color: var(--c2);" >Skills Section <small style="color: grey; font-size: 10px;" >click to remove</small> </h4>
-        <br>
-        <div id="skill-list" class="row">
-            {% include 'resumebuilder/partial/skills.html' %}
-        </div>
-        <br>
-        <div class="row" id="skill_form_wrap">
-        {% include 'resumebuilder/partial/skill_form.html' %}
-        </div>
-        <br>
-        <div class="btn-group w-100">
-            <button id="addskill" hx-get="{% url 'create_skill' rb.id %}" hx-target="#skill_form_wrap" hx-swap="beforeend"  class="btn w-25 btn-info text-light"><i class="fas fa-plus text-light"></i></button>
-            <button id="save_skills"  class="btn w-50 btn-success">Save&nbsp;&nbsp;<i class="far fa-save text-light"></i></button>
-
-        </div>
-    </div>
-
-    <br>
-    <hr>
-    <div class="row">
-        <h4 style="text-align: center; color: var(--c2);" >Education Section <small style="color: grey; font-size: 10px;" >click to remove</small> </h4>
-        <br>
-        <div id="edu-list" class="row">
-        {% include 'resumebuilder/partial/edu.html' %}        
-
-        </div>
-        <br>
-
-        <div class="row" id="edu_form_wrap">
-        {% include 'resumebuilder/partial/edu_form.html' %}        
-        </div>
-        
-      
-    </div>
-
-    <br>
-    <hr>
-    <div class="row">
-        <h4 style="text-align: center; color: var(--c2);" >Achivement Section </h4>
-        <br>
-        <div id="ach-list" class="row">
-        {% include 'resumebuilder/partial/ach.html' %}        
-        </div>
-        <br>
-
-        <div class="row" id="exp_form_wrap">
-        {% include 'resumebuilder/partial/ach_form.html' %}        
-        </div>
-        
-      
-    </div>
-
-    <br>
-    <hr>
-    <div class="row">
-        <h4 style="text-align: center; color: var(--c2);" >Project's Section </h4>
-        <br>
-        <div id="pro-list" class="row">
-        {% include 'resumebuilder/partial/pro.html' %}        
-        </div>
-        <br>
-
-        <div class="row" id="pro_form_wrap">
-        {% include 'resumebuilder/partial/pro_form.html' %}        
-        </div>
-        
-      
-    </div>
-
-    <br>
-    <hr>
-    <div class="row">
-        <h4 style="text-align: center; color: var(--c2);" >Social Links </h4>
-        <br>
-        <div id="soc-list" class="row">
-        {% include 'resumebuilder/partial/soc.html' %}        
-        </div>
-        <br>
-
-        <div class="row" id="soc_form_wrap">
-        {% include 'resumebuilder/partial/soc_form.html' %}        
-        </div>
-        
-      
-    </div>
-
-    <br>
-    <hr>
-    <div class="row">
-        <h4 style="text-align: center; color: var(--c2);" >Languages </h4>
-        <br>
-        <div id="lang-list" class="row">
-        {% include 'resumebuilder/partial/lang.html' %}        
-        </div>
-        <br>
-
-        <div class="row" id="lang_form_wrap">
-        {% include 'resumebuilder/partial/lang_form.html' %}        
-        </div>
-        
-        <div class="row mt-5">
-            <a href="{% url 'resume_templates' rb.uid %}" class="btn sub-btn w-100">View Resume</a>
-        </div>
-    </div>
-
-</div>
-{% endblock %} {% block script %}
-
-
-
-
+{% block script %}
 <script>
+    var opt = {
+        animation: true,
+        delay: 4000,
+        autohide: true,
+    };
+
+    function toast_show(text) {
+        document.getElementById("toast_message").innerText = text;
+        var tost_html = document.getElementById("liveToast");
+        var toast = new bootstrap.Toast(tost_html, opt);
+        toast.show();
+    }
+
     document.getElementById('submitButton').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent form submission to observe animation
+        event.preventDefault();
         var button = document.getElementById('submitButton');
-        
-        
-        button.innerHTML = `Saved !! <i class="fas fa-spinner text-light fa-spin"></i> `;
+        button.innerHTML = `Saving <i class="fas fa-spinner fa-spin"></i>`;
         button.disabled = true;
-        button.classList.add('blink-animation');
-        
-        // Reset animation and button after 2 seconds
+        toast_show("Saving resume details...");
         setTimeout(function() {
-            button.innerHTML = "Save";
+            button.innerHTML = "Save <i class='fas fa-save ms-2'></i>";
             button.disabled = false;
-            button.classList.remove('blink-animation');
+            toast_show("Resume details saved successfully!");
         }, 2000);
     });
 </script>
-
-
 {% endblock %}
