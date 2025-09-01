@@ -13,7 +13,7 @@ test.html
 .test.docx
 template.py
 tests/
-db.sqlite3
+
 sqlite.db
 .vscode/
 .idea/
@@ -34,4 +34,4 @@ secret_key.txt
 test.py
 eb.yaml
 config.yaml
-config.yml
+
